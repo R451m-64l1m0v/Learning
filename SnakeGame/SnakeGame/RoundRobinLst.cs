@@ -20,6 +20,11 @@ namespace SnakeGame
             _position = initPosition;
         }
 
+        public void StartPos(int pos)
+        {
+            _position = pos;
+        }
+
         public T NextF()
         {
             //if (_listF.Last() is int last && _position == last)

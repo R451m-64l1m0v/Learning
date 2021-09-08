@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using SnakeGame.Models;
 
 namespace SnakeGame
 {
@@ -32,20 +33,21 @@ namespace SnakeGame
         RoundRobinLst<int> RoundRobinLstLR = new RoundRobinLst<int>(new List<int> { 0, 1, 2, 3, 4 }, 2);
         private const int speed = 500;
         private Direction currentDirection;
-        
+        Food _food = new Food();
+
 
         public MainWindow()
         {
             InitializeComponent();
-            
         }
-
-        
-
 
         private void Srart_Click(object sender, RoutedEventArgs e)
         {
             cts.Cancel();
+
+           
+
+            _food.incerdNewEat(Food);
 
             var rnd = new Random();
             var rndDir = rnd.Next(0, 4);
@@ -56,6 +58,17 @@ namespace SnakeGame
             {
                 lock (locker)
                 {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Head.SetValue(Grid.ColumnProperty, 2);
+                        Head.SetValue(Grid.RowProperty, 2);
+                    });
+
+                    RoundRobinLstUD.StartPos(2);
+                    RoundRobinLstLR.StartPos(2);
+
+                    Task.Delay(200).Wait();
+
                     cts = new CancellationTokenSource();
                     while (!cts.IsCancellationRequested)
                     {
@@ -69,8 +82,6 @@ namespace SnakeGame
                 }
             }, TaskCreationOptions.LongRunning);
         }
-
-
 
         public void Dvijenie()
         {
@@ -91,9 +102,18 @@ namespace SnakeGame
             {
                 Head.SetValue(Grid.RowProperty, RoundRobinLstUD.NextB());
             }
+
+            var headX = (int)Head.GetValue(Grid.ColumnProperty);
+            var headY = (int)Head.GetValue(Grid.RowProperty);
+
+            var foodX = (int)Food.GetValue(Grid.ColumnProperty);
+            var foodY = (int)Food.GetValue(Grid.RowProperty);
+
+            if (headX == foodX && headY == foodY)
+            {
+                _food.incerdNewEat(Food);
+            }
         }
-
-
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -116,17 +136,7 @@ namespace SnakeGame
                 currentDirection = Direction.R;
             }
         }
+
+        
     }
-
-    
-
-    public enum Direction
-    {
-        U,
-        D,
-        L,
-        R
-    }
-
-    
 }

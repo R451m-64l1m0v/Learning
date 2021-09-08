@@ -93,6 +93,13 @@
                     Grid.Column="2"
                     Background="AntiqueWhite"
                     Content="UwU" />
+
+                <Button
+                    x:Name="Food"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Background="AntiqueWhite"
+                    Content="Food" />
             </Grid>
 
             <Grid Grid.Row="0" ShowGridLines="True">
