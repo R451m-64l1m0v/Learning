@@ -13,7 +13,7 @@ namespace RegisterToDoc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DoctorController : BaseRegisterToDocControllers
+    public class DoctorController : ControllerBase
     {
         [HttpGet]
         public List<Doctor> Get(string spec, string exper)
