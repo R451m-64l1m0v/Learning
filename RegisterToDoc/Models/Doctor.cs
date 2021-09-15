@@ -14,5 +14,9 @@ namespace RegisterToDoc.Models
         public string Specialization { get; set; }
         public string Education { get; set; }
         public int Experience { get; set; }
+
+        public List<WorkTime> WorkTimeFull { get; set; }
+
+        public Dictionary<int, List<Interval>> WorkTimeSvobodno { get; set; }
     }
 }
