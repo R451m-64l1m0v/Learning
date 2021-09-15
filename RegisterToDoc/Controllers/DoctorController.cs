@@ -15,13 +15,24 @@ namespace RegisterToDoc.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
+        [Route("GetDoctorsByFilter")]
         [HttpGet]
-        public List<Doctor> Get(string spec, string exper)
+        public List<Doctor> Get(string spec, int exper = 0)
         {
             var doctorDataService = new DoctorDataService();
             var doctors = doctorDataService.GetDoctorsList();
 
-            return doctors.Where(x => x.Specialization == spec).Where(x => x.Experience == exper).ToList();
+            return doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
+        }
+
+        [Route("GetSpecs")]
+        [HttpGet]
+        public List<string> GetSpecs()
+        {
+            var doctorDataService = new DoctorDataService();
+            var doctors = doctorDataService.GetDoctorsList();
+
+            return doctors.Select(x => x.Specialization).Distinct().ToList();
         }
     }
 }

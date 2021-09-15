@@ -22,7 +22,7 @@ namespace RegisterToDoc.Services
             doctor1.Surname = "111";
             doctor2.Age = 36;
             doctor1.Specialization = "Проктолог";
-            doctor1.Experience = "17 лет";
+            doctor1.Experience = 17;
             doctor1.Education = "Высшее";
 
             doctor2.Id = 2;
@@ -30,7 +30,7 @@ namespace RegisterToDoc.Services
             doctor2.Surname = "222";
             doctor2.Age = 36;
             doctor2.Specialization = "Педиатр";
-            doctor2.Experience = "8 лет";
+            doctor2.Experience = 8;
             doctor2.Education = "Высшее";
 
             doctor3.Id = 3;
@@ -38,7 +38,7 @@ namespace RegisterToDoc.Services
             doctor3.Surname = "333";
             doctor3.Age = 60;
             doctor3.Specialization = "Хирург";
-            doctor3.Experience = "25 лет";
+            doctor3.Experience = 25;
             doctor3.Education = "Не ПТУ, а колледж";
 
             doctor4.Id = 4;
@@ -46,7 +46,7 @@ namespace RegisterToDoc.Services
             doctor4.Surname = "444";
             doctor4.Age = 30;
             doctor4.Specialization = "Проктолог";
-            doctor4.Experience = "5 лет";
+            doctor4.Experience = 5;
             doctor4.Education = "Высшее";
 
             doctor5.Id = 5;
@@ -54,7 +54,7 @@ namespace RegisterToDoc.Services
             doctor5.Surname = "555";
             doctor5.Age = 30;
             doctor5.Specialization = "Хирург";
-            doctor5.Experience = "5 лет";
+            doctor5.Experience = 5;
             doctor5.Education = "Высшее";
 
 
