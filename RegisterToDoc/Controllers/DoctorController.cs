@@ -15,103 +15,166 @@ namespace RegisterToDoc.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
+        /// <summary>
+        /// Показыват врачей по специальности и опыту работы
+        /// </summary>
         [Route("GetDoctorsByFilter")]
         [HttpGet]
         public List<Doctor> Get(string spec, int exper = 0)
         {
-            var doctors = DoctorDataService.Doctors;
+            var doctors = DoctorDataService._Doctors;
 
             return doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
         }
-
+        
+        /// <summary>
+        /// Показыват врачей по специальности
+        /// </summary>
         [Route("GetSpecs")]
         [HttpGet]
         public List<string> GetSpecs()
         {
-            var doctors = DoctorDataService.Doctors;
+            var doctors = DoctorDataService._Doctors;
 
             return doctors.Select(x => x.Specialization).Distinct().ToList();
         }
 
+        /// <summary>
+        /// Показыват рабочие дни и часы доктора
+        /// </summary>
         [Route("GetReception")]
         [HttpGet]
         public Dictionary<int, List<Interval>> GetReception(int id)
         {
-            var doctors = DoctorDataService.Doctors;
+            var doctors = DoctorDataService._Doctors;
 
             var currentDoctor = doctors.FirstOrDefault(x => x.Id == id);
 
             if (currentDoctor != null)
             {
-                if (currentDoctor.WorkTimeSvobodno == null)
-                {
-                    currentDoctor.WorkTimeSvobodno = new Dictionary<int, List<Interval>>();
-                }
-
-                if (currentDoctor.WorkTimeFull.Count != currentDoctor.WorkTimeSvobodno.Count)
-                {
-                    foreach (var workTime in currentDoctor.WorkTimeFull)
-                    {
-                        var svob = currentDoctor.WorkTimeSvobodno.ContainsKey(workTime.Number);
-                        if (!svob)
-                        {
-                            var intervals = new List<Interval>();
-                            for (int i = workTime.StartHour; i < workTime.EndHour; i++)
-                            {
-                                if (i == 12)
-                                {
-                                    continue;
-                                }
-                                intervals.Add(new Interval() { StartHour = i, EndHour = i + 1 });
-                            }
-                            currentDoctor.WorkTimeSvobodno.Add(workTime.Number, intervals);
-                        }
-                    }
-                }
-
-                return currentDoctor.WorkTimeSvobodno;
+                return currentDoctor.WorkTimeGraphic;
             }
             else
             {
                 throw new Exception($"Не найден доктор по id - {id}");
             }
-
-
-            //var releaseReceptionService = new ReleaseReceptionService();
-            //var doctors = releaseReceptionService.GetReleaseReception();
         }
 
+        /// <summary>
+        /// Добавляет рабочий день и рабочие часы доктору
+        /// </summary>
         [Route("SetWorkDay")]
         [HttpPost]
-        public void InsertWorkDay(int idDoctor, int number, int from, int to)
+        public ActionResult InsertWorkDay(int idDoctor, int number, int from, int to)
         {
-            var doctors = DoctorDataService.Doctors;
-
+            //Вызов списка врачей
+            var doctors = DoctorDataService._Doctors;
+            // Вызов из списка врачей врача по id
             var currentDoctor = doctors.FirstOrDefault(x => x.Id == idDoctor);
 
-            currentDoctor?.WorkTimeFull.Add(new WorkTime()
+            try
             {
-                StartHour = from,
-                EndHour = to,
-                Number = number,
-            });
+                if (currentDoctor.WorkTimeFull == null)
+                {
+                    currentDoctor.WorkTimeFull = new List<WorkTime>();
+                }
+
+                currentDoctor?.WorkTimeFull.Add(new WorkTime()
+                {
+                    StartHour = from,
+                    EndHour = to,
+                    Number = number,
+                });
+
+                if (currentDoctor.WorkTimeGraphic == null)
+                {
+                    currentDoctor.WorkTimeGraphic = new Dictionary<int, List<Interval>>();
+                }
+
+                var intervals = new List<Interval>();
+                for (int i = from; i < to; i++)
+                {
+                    if (i == 12)
+                    {
+                        continue;
+                    }
+                    intervals.Add(new Interval() { StartHour = i, EndHour = i + 1 });
+                }
+                currentDoctor.WorkTimeGraphic.Add(number, intervals);
+
+                return Ok("Успешно установлен рабочий день доктору");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Не удалось установить рабочий день и сгенерировать график");
+            }
         }
 
-
+        /// <summary>
+        /// Запись к Врачу
+        /// </summary>
         [Route("appointment")]
         [HttpPost]
-        public void Appointment(int idDoctor, int number, int from, int to)
+        public ActionResult Appointment(int idDoctor, int number, int from, int to)
         {
-            var doctors = DoctorDataService.Doctors;
-
-            var currentDoctor = doctors.FirstOrDefault(x => x.Id == idDoctor);
-
-            var interval =  currentDoctor.WorkTimeSvobodno.FirstOrDefault(x => x.Key == number).Value
-                .FirstOrDefault(x => x.StartHour == from);
-
-            if (interval != null)
+            try
             {
-                currentDoctor.WorkTimeSvobodno.FirstOrDefault(x => x.Key == number).Value.Remove(interval);
+                //Вызов списка врачей
+                var doctors = DoctorDataService._Doctors;
+                // Вызов из списка врачей врача по id
+                var currentDoctor = doctors.FirstOrDefault(x => x.Id == idDoctor);
+
+                var interval = currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.Key == number).Value
+                    .FirstOrDefault(x => x.StartHour == from);
+
+                if (interval != null)
+                {
+                    currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.Key == number).Value.Remove(interval);
+                }
+
+                return Ok("Запись прошла успешно");
+            }
+            catch (Exception e)
+            {
+                return BadRequest($"Ошибка записи на прием - {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Добавляет доктора
+        /// </summary>
+        [Route("SetDoctor")]
+        [HttpPost]
+        public ActionResult SetDoctor(string Name, string Surname, int Age, string Specialization, string Education, int Experience)
+        {
+            List<Doctor> doctors = DoctorDataService._Doctors;
+            
+            try
+            {
+                //Генерирует Id для нового доктора
+                int lastId = 0;
+                if (doctors.Count > 0)
+                {
+                    lastId = doctors.Max(x => x.Id);
+                }
+
+                var doctor = new Doctor();
+                // тернарный оператор if/else
+                doctor.Id = lastId == 0 ? 1 : lastId + 1;
+                doctor.Name = Name;
+                doctor.Surname = Surname;
+                doctor.Age = Age;
+                doctor.Specialization = Specialization;
+                doctor.Education = Education;
+                doctor.Experience = Experience;
+
+                doctors.Add(doctor);
+
+                return Ok("Док добавлен");
+            }
+            catch (Exception e)
+            {
+                return BadRequest($"Ошибка добавления доктора- {e.Message}");
             }
         }
     }
