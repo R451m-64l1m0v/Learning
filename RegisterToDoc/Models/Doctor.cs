@@ -17,6 +17,6 @@ namespace RegisterToDoc.Models
 
         public List<WorkTime> WorkTimeFull { get; set; }
 
-        public Dictionary<int, List<Interval>> WorkTimeSvobodno { get; set; }
+        public Dictionary<int, List<Interval>> WorkTimeGraphic { get; set; }
     }
 }
