@@ -12,6 +12,7 @@ namespace RegisterToDoc.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
+        ClientControllerService _service = new ClientControllerService();
         /// <summary>
         /// Показыват врачей по специальности и опыту работы
         /// </summary>
@@ -19,9 +20,15 @@ namespace RegisterToDoc.Controllers
         [HttpGet]
         public List<Doctor> Get(string spec, int exper = 0)
         {
-            var doctors = DoctorDataService._Doctors;
-
-            return doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
+            try
+            {
+                var doctors = _service.Get(spec, exper);
+                return doctors;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Ошибка добавления доктора- {e.Message}");
+            }
         }
 
         /// <summary>
@@ -31,9 +38,15 @@ namespace RegisterToDoc.Controllers
         [HttpGet]
         public List<string> GetSpecs()
         {
-            var doctors = DoctorDataService._Doctors;
-
-            return doctors.Select(x => x.Specialization).Distinct().ToList();
+            try
+            {
+                var doctors = _service.GetSpecs();
+                return doctors;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Ошибка не найдены врачи - {e.Message}");
+            }
         }
 
         /// <summary>
@@ -43,15 +56,12 @@ namespace RegisterToDoc.Controllers
         [HttpGet]
         public Dictionary<int, List<Interval>> GetReception(int id)
         {
-            var doctors = DoctorDataService._Doctors;
-
-            var currentDoctor = doctors.FirstOrDefault(x => x.Id == id);
-
-            if (currentDoctor != null)
+            try
             {
-                return currentDoctor.WorkTimeGraphic;
+                var currentDoctor = _service.GetReception(id);
+                return currentDoctor;
             }
-            else
+            catch (Exception e)
             {
                 throw new Exception($"Не найден доктор по id - {id}");
             }
@@ -62,22 +72,11 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("Appointment")]
         [HttpPost]
-        public ActionResult Appointment(int idDoctor, int number, int from, int to)
+        public ActionResult Appointment(int idDoctor, int dataNumber, int from, int to)
         {
             try
             {
-                //Вызов списка врачей
-                var doctors = DoctorDataService._Doctors;
-                // Вызов из списка врачей врача по id
-                var currentDoctor = doctors.FirstOrDefault(x => x.Id == idDoctor);
-
-                var interval = currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.Key == number).Value
-                    .FirstOrDefault(x => x.StartHour == from);
-
-                if (interval != null)
-                {
-                    currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.Key == number).Value.Remove(interval);
-                }
+                _service.Appointment(idDoctor, dataNumber, from, to);
 
                 return Ok("Запись прошла успешно");
             }
