@@ -7,6 +7,6 @@ namespace RegisterToDoc.Models
 {
     public class WorkTime : Interval
     {
-        public int Number;
+        public int DataNumber;
     }
 }
