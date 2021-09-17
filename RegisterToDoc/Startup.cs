@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using RegisterToDoc.Controllers;
 using RegisterToDoc.Models;
+using RegisterToDoc.Services;
 
 namespace RegisterToDoc
 {
@@ -41,6 +42,9 @@ namespace RegisterToDoc
                         .AllowAnyMethod()
                         .AllowAnyHeader());
             });
+
+            services.AddSingleton<ClientControllerService>();
+            services.AddSingleton<AdminControllerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

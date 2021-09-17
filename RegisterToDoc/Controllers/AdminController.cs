@@ -1,13 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using RegisterToDoc.Models;
 using RegisterToDoc.Services;
+using System;
 
 namespace RegisterToDoc.Controllers
 {
@@ -15,7 +9,13 @@ namespace RegisterToDoc.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        AdminControllerService service = new ();
+        private readonly AdminControllerService _adminControllerService;
+
+        public AdminController(AdminControllerService adminControllerService)
+        {
+            _adminControllerService = adminControllerService;
+        }
+
         /// <summary>
         /// Добавляет рабочий день и рабочие часы доктору
         /// </summary>
@@ -25,7 +25,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                service.InsertWorkDay(idDoctor, dataNumber, from, to);
+                _adminControllerService.InsertWorkDay(idDoctor, dataNumber, from, to);
 
                 return Ok("Успешно установлен рабочий день доктору");
             }
@@ -40,11 +40,11 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("SetDoctor")]
         [HttpPost]
-        public ActionResult SetDoctor(string Name, string Surname, int Age, string Specialization, string Education, int Experience)
+        public ActionResult SetDoctor(DoctorDto doctor /*string Name, string Surname, int Age, string Specialization, string Education, int Experience*/)
         {
             try
             {
-                service.SetDoctor(Name, Surname, Age, Specialization, Education, Experience);
+                _adminControllerService.SetDoctor(doctor);
 
                 return Ok("Док добавлен");
             }

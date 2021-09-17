@@ -12,18 +12,36 @@ namespace RegisterToDoc.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        ClientControllerService _service = new ClientControllerService();
+        ClientControllerService _clientControllerService;
+
+        public ClientController(ClientControllerService clientControllerClientControllerService)
+        {
+            _clientControllerService = clientControllerClientControllerService;
+        }
+
         /// <summary>
         /// Показыват врачей по специальности и опыту работы
         /// </summary>
         [Route("GetDoctorsByFilter")]
         [HttpGet]
-        public List<Doctor> Get(string spec, int exper = 0)
+        public List<DoctorVm> Get(string spec, int exper = 0)
         {
             try
             {
-                var doctors = _service.Get(spec, exper);
-                return doctors;
+                var doctors = _clientControllerService.Get(spec, exper);
+                var doctorsVm = new List<DoctorVm>();
+
+                foreach (var doctor in doctors)
+                {
+                    var doctorVm = new DoctorVm()
+                    {
+                        Id = doctor.Id,
+                        Specialization = doctor.Specialization
+                    };
+                    doctorsVm.Add(doctorVm);
+                }
+
+                return doctorsVm;
             }
             catch (Exception e)
             {
@@ -40,7 +58,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                var doctors = _service.GetSpecs();
+                var doctors = _clientControllerService.GetSpecs();
                 return doctors;
             }
             catch (Exception e)
@@ -58,7 +76,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                var currentDoctor = _service.GetReception(id);
+                var currentDoctor = _clientControllerService.GetReception(id);
                 return currentDoctor;
             }
             catch (Exception e)
@@ -76,7 +94,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                _service.Appointment(idDoctor, dataNumber, from, to);
+                _clientControllerService.Appointment(idDoctor, dataNumber, from, to);
 
                 return Ok("Запись прошла успешно");
             }

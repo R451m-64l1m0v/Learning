@@ -52,8 +52,7 @@ namespace RegisterToDoc.Services
             currentDoctor.WorkTimeGraphic.Add(dataNumber, intervals);
         }
 
-        public void SetDoctor(string Name, string Surname, int Age, string Specialization, string Education,
-            int Experience)
+        public void SetDoctor(DoctorDto doctor1)
         {
             List<Doctor> doctors = DoctorDataService._Doctors;
 
@@ -67,12 +66,12 @@ namespace RegisterToDoc.Services
             var doctor = new Doctor();
             // тернарный оператор if/else
             doctor.Id = lastId == 0 ? 1 : lastId + 1;
-            doctor.Name = Name;
-            doctor.Surname = Surname;
-            doctor.Age = Age;
-            doctor.Specialization = Specialization;
-            doctor.Education = Education;
-            doctor.Experience = Experience;
+            doctor.Name = doctor1.Name;
+            doctor.Surname = doctor1.Surname;
+            doctor.Age = doctor1.Age;
+            doctor.Specialization = doctor1.Specialization;
+            doctor.Education = doctor1.Education;
+            doctor.Experience = doctor1.Experience;
 
             doctors.Add(doctor);
         }

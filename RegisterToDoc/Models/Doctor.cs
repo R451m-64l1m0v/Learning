@@ -19,4 +19,10 @@ namespace RegisterToDoc.Models
 
         public Dictionary<int, List<Interval>> WorkTimeGraphic { get; set; }
     }
+
+    public class DoctorVm
+    {
+        public int Id { get; set; }
+        public string Specialization { get; set; }
+    }
 }
