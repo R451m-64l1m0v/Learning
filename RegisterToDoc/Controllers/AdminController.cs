@@ -13,7 +13,7 @@ namespace RegisterToDoc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DoctorController : ControllerBase
+    public class AdminController : ControllerBase
     {
         /// <summary>
         /// Добавляет рабочий день и рабочие часы доктору
