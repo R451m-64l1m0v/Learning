@@ -37,7 +37,7 @@ namespace RegisterToDoc.Services
 
             if (currentDoctor.WorkTimeGraphic == null)
             {
-                currentDoctor.WorkTimeGraphic = new Dictionary<int, List<Interval>>();
+                currentDoctor.WorkTimeGraphic = new List<WorkTimeGraphic>(); //new Dictionary<int, List<Interval>>();
             }
 
             var intervals = new List<Interval>();
@@ -49,7 +49,8 @@ namespace RegisterToDoc.Services
                 }
                 intervals.Add(new Interval() { StartHour = i, EndHour = i + 1 });
             }
-            currentDoctor.WorkTimeGraphic.Add(dataNumber, intervals);
+            //currentDoctor.WorkTimeGraphic.Add(dataNumber, intervals);
+            currentDoctor.WorkTimeGraphic.Add(new WorkTimeGraphic(){DayNumber = dataNumber, Intervals = intervals});
         }
 
         public void SetDoctor(DoctorDto doctor1)

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegisterToDoc.Models
 {
@@ -15,9 +17,17 @@ namespace RegisterToDoc.Models
         public string Education { get; set; }
         public int Experience { get; set; }
 
-        public List<WorkTime> WorkTimeFull { get; set; }
+        public ICollection<WorkTime> WorkTimeFull { get; set; }
 
-        public Dictionary<int, List<Interval>> WorkTimeGraphic { get; set; }
+        //public Dictionary<int, List<Interval>> WorkTimeGraphic { get; set; }
+        public ICollection<WorkTimeGraphic> WorkTimeGraphic { get; set; }
+    }
+
+    public class WorkTimeGraphic
+    {
+        public int Id { get; set; }
+        public int DayNumber { get; set; }
+        public ICollection<Interval> Intervals { get; set; }
     }
 
     public class DoctorVm

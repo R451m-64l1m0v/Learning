@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RegisterToDoc.BD;
 using RegisterToDoc.Models;
 using RegisterToDoc.Services;
 
@@ -13,22 +14,28 @@ namespace RegisterToDoc.Controllers
     public class ClientController : ControllerBase
     {
         ClientControllerService _clientControllerService;
+        private readonly ApplicationDBContext _applicationDbContext;
 
-        public ClientController(ClientControllerService clientControllerClientControllerService)
+
+        public ClientController(ClientControllerService clientControllerClientControllerService, ApplicationDBContext applicationDbContext)
         {
             _clientControllerService = clientControllerClientControllerService;
+            _applicationDbContext = applicationDbContext;
         }
+
 
         /// <summary>
         /// Показыват врачей по специальности и опыту работы
         /// </summary>
         [Route("GetDoctorsByFilter")]
         [HttpGet]
-        public List<DoctorVm> Get(string spec, int exper = 0)
+        public List<DoctorVm> GetDoctorsByFilter(string spec, int exper = 0)
         {
             try
             {
-                var doctors = _clientControllerService.Get(spec, exper);
+                //var doctors = _clientControllerService.GetDoctorsByFilter(spec, exper);
+                var doctors = _applicationDbContext.Doctors.Where(x => x.Specialization == spec)
+                    .Where(x => x.Experience >= exper).ToList();
                 var doctorsVm = new List<DoctorVm>();
 
                 foreach (var doctor in doctors)
@@ -72,7 +79,7 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("GetReception")]
         [HttpGet]
-        public Dictionary<int, List<Interval>> GetReception(int id)
+        public ICollection<WorkTimeGraphic> GetReception(int id)
         {
             try
             {

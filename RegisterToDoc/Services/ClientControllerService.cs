@@ -9,7 +9,7 @@ namespace RegisterToDoc.Services
 {
     public class ClientControllerService
     {
-        public List<Doctor> Get(string spec, int exper = 0)
+        public List<Doctor> GetDoctorsByFilter(string spec, int exper = 0)
         {
             var doctors = DoctorDataService._Doctors;
 
@@ -23,7 +23,7 @@ namespace RegisterToDoc.Services
             return doctors.Select(x => x.Specialization).Distinct().ToList();
         }
 
-        public Dictionary<int, List<Interval>> GetReception(int id)
+        public ICollection<WorkTimeGraphic> GetReception(int id)
         {
             var doctors = DoctorDataService._Doctors;
 
@@ -46,12 +46,12 @@ namespace RegisterToDoc.Services
             // Вызов из списка врачей врача по id
             var currentDoctor = doctors.FirstOrDefault(x => x.Id == idDoctor);
 
-            var interval = currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.Key == dataNumber).Value
+            var interval = currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals
                 .FirstOrDefault(x => x.StartHour == from);
 
             if (interval != null)
             {
-                currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.Key == dataNumber).Value.Remove(interval);
+                currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.Remove(interval);
             }
         }
     }

@@ -7,6 +7,7 @@ namespace RegisterToDoc.Models
 {
     public class Interval
     {
+        public int Id { get; set; }
         public int StartHour { get; set; }
         public int EndHour { get; set; }
     }
