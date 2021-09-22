@@ -9,8 +9,8 @@ using RegisterToDoc.BD;
 namespace RegisterToDoc.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210922134714_Init1")]
-    partial class Init1
+    [Migration("20210922163012_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,20 +59,23 @@ namespace RegisterToDoc.Migrations
                     b.Property<int>("StartHour")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("WorkTimeGraphicId")
+                    b.Property<int?>("WorkGraphicId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkTimeGraphicId");
+                    b.HasIndex("WorkGraphicId");
 
                     b.ToTable("Intervals");
                 });
 
-            modelBuilder.Entity("RegisterToDoc.Models.WorkTime", b =>
+            modelBuilder.Entity("RegisterToDoc.Models.WorkGraphic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DayNumber")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("DoctorId")
@@ -88,50 +91,22 @@ namespace RegisterToDoc.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("WorkTimeFull");
-                });
-
-            modelBuilder.Entity("RegisterToDoc.Models.WorkTimeGraphic", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DayNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("DoctorId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.ToTable("WorkTimeGraphics");
+                    b.ToTable("WorkGraphics");
                 });
 
             modelBuilder.Entity("RegisterToDoc.Models.Interval", b =>
                 {
-                    b.HasOne("RegisterToDoc.Models.WorkTimeGraphic", "WorkTimeGraphic")
+                    b.HasOne("RegisterToDoc.Models.WorkGraphic", "WorkGraphic")
                         .WithMany("Intervals")
-                        .HasForeignKey("WorkTimeGraphicId");
+                        .HasForeignKey("WorkGraphicId");
 
-                    b.Navigation("WorkTimeGraphic");
+                    b.Navigation("WorkGraphic");
                 });
 
-            modelBuilder.Entity("RegisterToDoc.Models.WorkTime", b =>
+            modelBuilder.Entity("RegisterToDoc.Models.WorkGraphic", b =>
                 {
                     b.HasOne("RegisterToDoc.Models.Doctor", "Doctor")
-                        .WithMany("WorkTimeFull")
-                        .HasForeignKey("DoctorId");
-
-                    b.Navigation("Doctor");
-                });
-
-            modelBuilder.Entity("RegisterToDoc.Models.WorkTimeGraphic", b =>
-                {
-                    b.HasOne("RegisterToDoc.Models.Doctor", "Doctor")
-                        .WithMany("WorkTimeGraphic")
+                        .WithMany("WorkGraphic")
                         .HasForeignKey("DoctorId");
 
                     b.Navigation("Doctor");
@@ -139,12 +114,10 @@ namespace RegisterToDoc.Migrations
 
             modelBuilder.Entity("RegisterToDoc.Models.Doctor", b =>
                 {
-                    b.Navigation("WorkTimeFull");
-
-                    b.Navigation("WorkTimeGraphic");
+                    b.Navigation("WorkGraphic");
                 });
 
-            modelBuilder.Entity("RegisterToDoc.Models.WorkTimeGraphic", b =>
+            modelBuilder.Entity("RegisterToDoc.Models.WorkGraphic", b =>
                 {
                     b.Navigation("Intervals");
                 });

@@ -21,11 +21,11 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("SetWorkDay")]
         [HttpPost]
-        public ActionResult InsertWorkDay(int idDoctor, int dataNumber, int from, int to)
+        public ActionResult InsertWorkDay(int idDoctor, int dayNumber, int from, int to)
         {
             try
             {
-                _adminService.InsertWorkDay(idDoctor, dataNumber, from, to);
+                _adminService.InsertWorkDay(idDoctor, dayNumber, from, to);
 
                 return Ok("Успешно установлен рабочий день доктору");
             }

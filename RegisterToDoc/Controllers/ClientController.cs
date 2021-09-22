@@ -79,7 +79,7 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("GetReception")]
         [HttpGet]
-        public ICollection<WorkTimeGraphic> GetReception(int id)
+        public ICollection<WorkGraphic> GetReception(int id)
         {
             try
             {

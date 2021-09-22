@@ -21,20 +21,13 @@ namespace RegisterToDoc.Services
         /// <summary>
         /// Создание рабочего дня с часами работы
         /// </summary>
-        public void InsertWorkDay(int idDoctor, int dataNumber, int from, int to)
+        public void InsertWorkDay(int idDoctor, int dayNumber, int from, int to)
         {
             // Вызов из BD врача и его рабочие дни по id 
             var currentDoctor = _dbContext.Doctors
-                .Include(x => x.WorkTimeFull)
-                .Include(x => x.WorkTimeGraphic)
+                .Include(x => x.WorkGraphic)
                 .FirstOrDefault(x => x.Id == idDoctor);
-            currentDoctor.WorkTimeFull.Add(new WorkTime() { StartHour = from, EndHour = to, DataNumber = dataNumber });
 
-            //Добавление робочего дня и часов выбранному доктору
-            //_dbContext.WorkTimeFull.Add(new WorkTime() {StartHour = from, EndHour = to, DataNumber = dataNumber});
-           //Сщхранеие в BD
-            //_dbContext.SaveChanges();
-            
             //Создает рабочие часы
             var intervals = new List<Interval>();
             for (int i = from; i < to; i++)
@@ -47,8 +40,7 @@ namespace RegisterToDoc.Services
             }
 
             //Добавляет рабочие часы в базу
-            //_dbContext.WorkTimeGraphics.Add(new WorkTimeGraphic() {DayNumber = dataNumber, Intervals = intervals, Doctor = currentDoctor});
-            currentDoctor.WorkTimeGraphic.Add(new WorkTimeGraphic() { DayNumber = dataNumber, Intervals = intervals});
+            currentDoctor.WorkGraphic.Add(new WorkGraphic() { StartHour = from, EndHour = to, DayNumber = dayNumber, Intervals = intervals});
             _dbContext.SaveChanges();
         }
 
@@ -59,18 +51,7 @@ namespace RegisterToDoc.Services
         /// <param name="doctor1"></param>
         public void SetDoctor(DoctorDto doctor1)
         {
-            var doctors = _dbContext.Doctors.ToList();
-
-            //Генерирует Id для нового доктора
-            int lastId = 0;
-            if (doctors.Count > 0)
-            {
-                lastId = doctors.Max(x => x.Id);
-            }
-
             var doctor = new Doctor();
-            // тернарный оператор if/else
-            doctor.Id = lastId == 0 ? 1 : lastId + 1;
             doctor.Name = doctor1.Name;
             doctor.Surname = doctor1.Surname;
             doctor.Age = doctor1.Age;

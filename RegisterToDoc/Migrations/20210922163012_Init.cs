@@ -25,40 +25,21 @@ namespace RegisterToDoc.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkTime",
+                name: "WorkGraphics",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    DayNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     StartHour = table.Column<int>(type: "INTEGER", nullable: false),
                     EndHour = table.Column<int>(type: "INTEGER", nullable: false),
                     DoctorId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkTime", x => x.Id);
+                    table.PrimaryKey("PK_WorkGraphics", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WorkTime_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkTimeGraphics",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DayNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    DoctorId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkTimeGraphics", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WorkTimeGraphics_Doctors_DoctorId",
+                        name: "FK_WorkGraphics_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "Id",
@@ -73,32 +54,27 @@ namespace RegisterToDoc.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     StartHour = table.Column<int>(type: "INTEGER", nullable: false),
                     EndHour = table.Column<int>(type: "INTEGER", nullable: false),
-                    WorkTimeGraphicId = table.Column<int>(type: "INTEGER", nullable: true)
+                    WorkGraphicId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Intervals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Intervals_WorkTimeGraphics_WorkTimeGraphicId",
-                        column: x => x.WorkTimeGraphicId,
-                        principalTable: "WorkTimeGraphics",
+                        name: "FK_Intervals_WorkGraphics_WorkGraphicId",
+                        column: x => x.WorkGraphicId,
+                        principalTable: "WorkGraphics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Intervals_WorkTimeGraphicId",
+                name: "IX_Intervals_WorkGraphicId",
                 table: "Intervals",
-                column: "WorkTimeGraphicId");
+                column: "WorkGraphicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkTime_DoctorId",
-                table: "WorkTime",
-                column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkTimeGraphics_DoctorId",
-                table: "WorkTimeGraphics",
+                name: "IX_WorkGraphics_DoctorId",
+                table: "WorkGraphics",
                 column: "DoctorId");
         }
 
@@ -108,10 +84,7 @@ namespace RegisterToDoc.Migrations
                 name: "Intervals");
 
             migrationBuilder.DropTable(
-                name: "WorkTime");
-
-            migrationBuilder.DropTable(
-                name: "WorkTimeGraphics");
+                name: "WorkGraphics");
 
             migrationBuilder.DropTable(
                 name: "Doctors");

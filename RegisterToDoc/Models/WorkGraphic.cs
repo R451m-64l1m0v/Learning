@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RegisterToDoc.Models
 {
-    public class WorkTime
+    public class WorkGraphic
     {
         public int Id { get; set; }
+        public int DayNumber { get; set; }
         public int StartHour { get; set; }
         public int EndHour { get; set; }
-
-        public int DataNumber;
+        public ICollection<Interval> Intervals { get; set; }
 
         public Doctor Doctor { get; set; }
     }

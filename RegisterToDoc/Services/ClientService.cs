@@ -21,27 +21,21 @@ namespace RegisterToDoc.Services
 
         public List<Doctor> GetDoctorsByFilter(string spec, int exper = 0)
         {
-            
-
             return _dbContext.Doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
         }
 
         public List<string> GetSpecs()
         {
-            
-
             return _dbContext.Doctors.Select(x => x.Specialization).Distinct().ToList();
         }
 
-        public ICollection<WorkTimeGraphic> GetReception(int id)
+        public ICollection<WorkGraphic> GetReception(int id)
         {
-            
-
-            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkTimeGraphic).FirstOrDefault(x => x.Id == id);
+            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkGraphic).FirstOrDefault(x => x.Id == id);
 
             if (currentDoctor != null)
             {
-                return currentDoctor.WorkTimeGraphic;
+                return currentDoctor.WorkGraphic;
             }
             else
             {
@@ -51,16 +45,15 @@ namespace RegisterToDoc.Services
 
         public void Appointment(int idDoctor, int dataNumber, int from, int to)
         {
-            
             // Вызов из DB врача по id
-            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkTimeGraphic).FirstOrDefault(x => x.Id == idDoctor);
+            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkGraphic).FirstOrDefault(x => x.Id == idDoctor);
 
-            var interval = currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals
+            var interval = currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals
                 .FirstOrDefault(x => x.StartHour == from);
 
             if (interval != null)
             {
-                currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.Remove(interval);
+                currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.Remove(interval);
             }
         }
     }
