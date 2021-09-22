@@ -9,8 +9,8 @@ using RegisterToDoc.BD;
 namespace RegisterToDoc.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210922092337_Initial")]
-    partial class Initial
+    [Migration("20210922134714_Init1")]
+    partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,10 +53,6 @@ namespace RegisterToDoc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("EndHour")
                         .HasColumnType("INTEGER");
 
@@ -71,8 +67,28 @@ namespace RegisterToDoc.Migrations
                     b.HasIndex("WorkTimeGraphicId");
 
                     b.ToTable("Intervals");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Interval");
+            modelBuilder.Entity("RegisterToDoc.Models.WorkTime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EndHour")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StartHour")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("WorkTimeFull");
                 });
 
             modelBuilder.Entity("RegisterToDoc.Models.WorkTimeGraphic", b =>
@@ -94,37 +110,31 @@ namespace RegisterToDoc.Migrations
                     b.ToTable("WorkTimeGraphics");
                 });
 
-            modelBuilder.Entity("RegisterToDoc.Models.WorkTime", b =>
-                {
-                    b.HasBaseType("RegisterToDoc.Models.Interval");
-
-                    b.Property<int?>("DoctorId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasDiscriminator().HasValue("WorkTime");
-                });
-
             modelBuilder.Entity("RegisterToDoc.Models.Interval", b =>
                 {
-                    b.HasOne("RegisterToDoc.Models.WorkTimeGraphic", null)
+                    b.HasOne("RegisterToDoc.Models.WorkTimeGraphic", "WorkTimeGraphic")
                         .WithMany("Intervals")
                         .HasForeignKey("WorkTimeGraphicId");
+
+                    b.Navigation("WorkTimeGraphic");
+                });
+
+            modelBuilder.Entity("RegisterToDoc.Models.WorkTime", b =>
+                {
+                    b.HasOne("RegisterToDoc.Models.Doctor", "Doctor")
+                        .WithMany("WorkTimeFull")
+                        .HasForeignKey("DoctorId");
+
+                    b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("RegisterToDoc.Models.WorkTimeGraphic", b =>
                 {
-                    b.HasOne("RegisterToDoc.Models.Doctor", null)
+                    b.HasOne("RegisterToDoc.Models.Doctor", "Doctor")
                         .WithMany("WorkTimeGraphic")
                         .HasForeignKey("DoctorId");
-                });
 
-            modelBuilder.Entity("RegisterToDoc.Models.WorkTime", b =>
-                {
-                    b.HasOne("RegisterToDoc.Models.Doctor", null)
-                        .WithMany("WorkTimeFull")
-                        .HasForeignKey("DoctorId");
+                    b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("RegisterToDoc.Models.Doctor", b =>

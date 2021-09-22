@@ -3,31 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RegisterToDoc.BD;
 using RegisterToDoc.Models;
 
 namespace RegisterToDoc.Services
 {
-    public class ClientControllerService
+    public class ClientService
     {
+        private readonly ApplicationDBContext _dbContext;
+
+        public ClientService(ApplicationDBContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+
         public List<Doctor> GetDoctorsByFilter(string spec, int exper = 0)
         {
-            var doctors = DoctorDataService._Doctors;
+            
 
-            return doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
+            return _dbContext.Doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
         }
 
         public List<string> GetSpecs()
         {
-            var doctors = DoctorDataService._Doctors;
+            
 
-            return doctors.Select(x => x.Specialization).Distinct().ToList();
+            return _dbContext.Doctors.Select(x => x.Specialization).Distinct().ToList();
         }
 
         public ICollection<WorkTimeGraphic> GetReception(int id)
         {
-            var doctors = DoctorDataService._Doctors;
+            
 
-            var currentDoctor = doctors.FirstOrDefault(x => x.Id == id);
+            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkTimeGraphic).FirstOrDefault(x => x.Id == id);
 
             if (currentDoctor != null)
             {
@@ -41,10 +51,9 @@ namespace RegisterToDoc.Services
 
         public void Appointment(int idDoctor, int dataNumber, int from, int to)
         {
-            //Вызов списка врачей
-            var doctors = DoctorDataService._Doctors;
-            // Вызов из списка врачей врача по id
-            var currentDoctor = doctors.FirstOrDefault(x => x.Id == idDoctor);
+            
+            // Вызов из DB врача по id
+            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkTimeGraphic).FirstOrDefault(x => x.Id == idDoctor);
 
             var interval = currentDoctor.WorkTimeGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals
                 .FirstOrDefault(x => x.StartHour == from);

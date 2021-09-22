@@ -10,5 +10,7 @@ namespace RegisterToDoc.Models
         public int Id { get; set; }
         public int StartHour { get; set; }
         public int EndHour { get; set; }
+        
+        public WorkTimeGraphic WorkTimeGraphic { get; set; }
     }
 }

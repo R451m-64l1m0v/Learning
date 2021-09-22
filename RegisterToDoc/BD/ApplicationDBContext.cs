@@ -13,9 +13,26 @@ namespace RegisterToDoc.BD
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<WorkTimeGraphic> WorkTimeGraphics { get; set; }
         public DbSet<Interval> Intervals { get; set; }
+        public DbSet<WorkTime> WorkTimeFull { get; set; }
+
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Interval>()
+                .HasOne(p => p.WorkTimeGraphic)
+                .WithMany(b => b.Intervals);
+
+            modelBuilder.Entity<WorkTimeGraphic>()
+                .HasOne(p => p.Doctor)
+                .WithMany(b => b.WorkTimeGraphic);
+
+            modelBuilder.Entity<WorkTime>()
+                .HasOne(p => p.Doctor)
+                .WithMany(b => b.WorkTimeFull);
         }
     }
 }

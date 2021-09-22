@@ -9,11 +9,11 @@ namespace RegisterToDoc.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly AdminControllerService _adminControllerService;
+        private readonly AdminService _adminService;
 
-        public AdminController(AdminControllerService adminControllerService)
+        public AdminController(AdminService adminService)
         {
-            _adminControllerService = adminControllerService;
+            _adminService = adminService;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                _adminControllerService.InsertWorkDay(idDoctor, dataNumber, from, to);
+                _adminService.InsertWorkDay(idDoctor, dataNumber, from, to);
 
                 return Ok("Успешно установлен рабочий день доктору");
             }
@@ -44,7 +44,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                _adminControllerService.SetDoctor(doctor);
+                _adminService.SetDoctor(doctor);
 
                 return Ok("Док добавлен");
             }

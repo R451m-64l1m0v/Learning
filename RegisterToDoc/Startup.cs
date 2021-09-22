@@ -47,8 +47,8 @@ namespace RegisterToDoc
 
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlite(Configuration.GetConnectionString("cs")));
 
-            services.AddSingleton<ClientControllerService>();
-            services.AddSingleton<AdminControllerService>();
+            services.AddScoped<ClientService>();
+            services.AddScoped<AdminService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

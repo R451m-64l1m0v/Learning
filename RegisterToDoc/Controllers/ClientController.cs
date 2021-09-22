@@ -13,13 +13,13 @@ namespace RegisterToDoc.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        ClientControllerService _clientControllerService;
+        ClientService _clientService;
         private readonly ApplicationDBContext _applicationDbContext;
 
 
-        public ClientController(ClientControllerService clientControllerClientControllerService, ApplicationDBContext applicationDbContext)
+        public ClientController(ClientService clientClientService, ApplicationDBContext applicationDbContext)
         {
-            _clientControllerService = clientControllerClientControllerService;
+            _clientService = clientClientService;
             _applicationDbContext = applicationDbContext;
         }
 
@@ -33,7 +33,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                //var doctors = _clientControllerService.GetDoctorsByFilter(spec, exper);
+                //var doctors = _clientService.GetDoctorsByFilter(spec, exper);
                 var doctors = _applicationDbContext.Doctors.Where(x => x.Specialization == spec)
                     .Where(x => x.Experience >= exper).ToList();
                 var doctorsVm = new List<DoctorVm>();
@@ -65,7 +65,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                var doctors = _clientControllerService.GetSpecs();
+                var doctors = _clientService.GetSpecs();
                 return doctors;
             }
             catch (Exception e)
@@ -83,7 +83,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                var currentDoctor = _clientControllerService.GetReception(id);
+                var currentDoctor = _clientService.GetReception(id);
                 return currentDoctor;
             }
             catch (Exception e)
@@ -101,7 +101,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                _clientControllerService.Appointment(idDoctor, dataNumber, from, to);
+                _clientService.Appointment(idDoctor, dataNumber, from, to);
 
                 return Ok("Запись прошла успешно");
             }

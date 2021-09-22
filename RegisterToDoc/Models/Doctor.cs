@@ -28,6 +28,8 @@ namespace RegisterToDoc.Models
         public int Id { get; set; }
         public int DayNumber { get; set; }
         public ICollection<Interval> Intervals { get; set; }
+
+        public Doctor Doctor { get; set; }
     }
 
     public class DoctorVm
