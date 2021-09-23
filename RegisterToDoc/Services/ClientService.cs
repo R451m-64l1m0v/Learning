@@ -18,7 +18,6 @@ namespace RegisterToDoc.Services
             _dbContext = dbContext;
         }
 
-
         public List<Doctor> GetDoctorsByFilter(string spec, int exper = 0)
         {
             return _dbContext.Doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
@@ -26,12 +25,16 @@ namespace RegisterToDoc.Services
 
         public List<string> GetSpecs()
         {
-            return _dbContext.Doctors.Select(x => x.Specialization).Distinct().ToList();
+
+            return _dbContext.Doctors.Select(x => x.Specialization).ToList();
         }
 
         public ICollection<WorkGraphic> GetReception(int id)
         {
-            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkGraphic).FirstOrDefault(x => x.Id == id);
+            var currentDoctor = _dbContext.Doctors
+                .Include(x => x.WorkGraphic)
+                .ThenInclude(x => x.Intervals)
+                .FirstOrDefault(x => x.Id == id);
 
             if (currentDoctor != null)
             {
@@ -46,14 +49,20 @@ namespace RegisterToDoc.Services
         public void Appointment(int idDoctor, int dataNumber, int from, int to)
         {
             // Вызов из DB врача по id
-            var currentDoctor = _dbContext.Doctors.Include(x => x.WorkGraphic).FirstOrDefault(x => x.Id == idDoctor);
+            var currentDoctor = _dbContext.Doctors.
+                Include(x => x.WorkGraphic).
+                ThenInclude(x => x.Intervals).
+                FirstOrDefault(x => x.Id == idDoctor);
 
-            var interval = currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals
-                .FirstOrDefault(x => x.StartHour == from);
+            var interval = currentDoctor.WorkGraphic.
+                FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.
+                FirstOrDefault(x => x.StartHour == from);
 
             if (interval != null)
             {
-                currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.Remove(interval);
+                _dbContext.Intervals.Remove(interval);
+                _dbContext.SaveChanges();
+                //currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.interval;
             }
         }
     }

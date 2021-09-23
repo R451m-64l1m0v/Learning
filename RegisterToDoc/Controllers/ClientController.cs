@@ -33,7 +33,6 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                //var doctors = _clientService.GetDoctorsByFilter(spec, exper);
                 var doctors = _applicationDbContext.Doctors.Where(x => x.Specialization == spec)
                     .Where(x => x.Experience >= exper).ToList();
                 var doctorsVm = new List<DoctorVm>();
@@ -77,6 +76,8 @@ namespace RegisterToDoc.Controllers
         /// <summary>
         /// Показыват рабочие дни и часы доктора
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("GetReception")]
         [HttpGet]
         public ICollection<WorkGraphic> GetReception(int id)

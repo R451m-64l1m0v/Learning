@@ -26,6 +26,7 @@ namespace RegisterToDoc.BD
             modelBuilder.Entity<WorkGraphic>()
                 .HasOne(p => p.Doctor)
                 .WithMany(b => b.WorkGraphic);
+
         }
     }
 }
