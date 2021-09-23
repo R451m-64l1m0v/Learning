@@ -20,7 +20,8 @@ namespace RegisterToDoc.Services
 
         public List<Doctor> GetDoctorsByFilter(string spec, int exper = 0)
         {
-            return _dbContext.Doctors.Where(x => x.Specialization == spec).Where(x => x.Experience >= exper).ToList();
+            return _dbContext.Doctors.Where(x => x.Specialization == spec)
+                .Where(x => x.Experience >= exper).ToList();
         }
 
         public List<string> GetSpecs()

@@ -33,8 +33,7 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                var doctors = _applicationDbContext.Doctors.Where(x => x.Specialization == spec)
-                    .Where(x => x.Experience >= exper).ToList();
+                var doctors = _clientService.GetDoctorsByFilter(spec, exper);
                 var doctorsVm = new List<DoctorVm>();
 
                 foreach (var doctor in doctors)
