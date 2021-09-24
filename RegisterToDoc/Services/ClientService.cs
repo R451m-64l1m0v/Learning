@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,59 +12,63 @@ namespace RegisterToDoc.Services
 {
     public class ClientService
     {
-        private readonly IDbRepository<Doctor> _repository;
+        private readonly IDbRepository<Doctor> _docRepository;
+        private readonly IDbRepository<WorkGraphic> _wgRepository;
+        
 
-        public ClientService(IDbRepository<Doctor> repository)
+        public ClientService(IDbRepository<Doctor> docRepository , IDbRepository<WorkGraphic> wgRepository)
         {
-            _repository = repository;
+            _docRepository = docRepository;
+            _wgRepository = wgRepository;
         }
 
         public List<Doctor> GetDoctorsByFilter(string specialization, int experience)
         {
-            //return _repository.GetDoctorsByFilter(specialization, experience);
-            return null;
+            return _docRepository.GetAll().Where(x => x.Specialization == specialization)
+                .Where(x => x.Experience >= experience).ToList();
         }
 
         public List<string> GetSpecialization()
         {
-            //return _repository.GetSpecialization();
-            return null;
+            return _docRepository.GetAll().Select(x => x.Specialization).ToList();
         }
 
-        public ICollection<WorkGraphic> GetReception(int id)
+        public IEnumerable<WorkGraphic> GetReception(int id)
         {
-            //var d = _repository.GetDoctorById(id);
+            var d = _wgRepository.GetAll().Where(x=>x.Doctor.Id == id);
 
-            //if (d != null)
-            //{
-            //    return d.WorkGraphic;
-            //}
-            //else
-            //{
-            //    throw new Exception($"Не найден доктор по id - {id}");
-            //}
-            return null;
-
+            return d;
+            
         }
 
         public void Appointment(int idDoctor, int dataNumber, int from, int to)
         {
-            // Вызов из DB врача по id
-            //var currentDoctor = DbContext.Doctors.
-            //    Include(x => x.WorkGraphic).
-            //    ThenInclude(x => x.Intervals).
-            //    FirstOrDefault(x => x.Id == idDoctor);
+            //Вызов из DB врача по id
+            var currentDoctor = _docRepository.DbContext.Doctors.
+                Include(x => x.WorkGraphic).
+                ThenInclude(x => x.Intervals).
+                FirstOrDefault(x => x.Id == idDoctor);
 
-            //var interval = currentDoctor.WorkGraphic.
-            //    FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.
-            //    FirstOrDefault(x => x.StartHour == from);
+            if (currentDoctor != null)
+            {
+                var interval = currentDoctor.WorkGraphic.
+                    FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.
+                    FirstOrDefault(x => x.StartHour == from);
 
-            //if (interval != null)
-            //{
-            //    DbContext.Intervals.Remove(interval);
-            //    DbContext.SaveChanges();
-            //    //currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.interval;
-            //}
+                if (interval != null)
+                {
+                    _docRepository.DbContext.Intervals.Remove(interval);
+                    _docRepository.DbContext.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Не удалось записаться");
+                }
+            }
+            else
+            {
+                throw new Exception("Не удалось записаться");
+            }
         }
     }
 }

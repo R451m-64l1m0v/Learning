@@ -41,55 +41,5 @@ namespace RegisterToDoc.BD
             DbContext.Set<T>().Update(t);
             DbContext.SaveChanges();
         }
-
-
-        //public IEnumerable<Doctor> GetDoctors()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Doctor GetDoctorById(int doctorId)
-        //{
-        //    var currentDoctor = DbContext.Doctors
-        //        .Include(x => x.WorkGraphic)
-        //        .ThenInclude(x => x.Intervals)
-        //        .FirstOrDefault(x => x.Id == doctorId);
-
-        //    return currentDoctor;
-        //}
-
-       
-
-        //public List<string> GetSpecialization()
-        //{
-        //    return DbContext.Doctors.Select(x => x.Specialization).ToList();
-        //}
-
-        //public List<Doctor> GetDoctorsByFilter(string specialization, int experience)
-        //{
-        //    return DbContext.Doctors.Where(x => x.Specialization == specialization)
-        //        .Where(x => x.Experience >= experience).ToList();
-        //}
-
-        //public void InsertWorkDay(int idDoctor, int dayNumber, int @from, int to)
-        //{
-        //    DbContext.Doctors
-        //        .Include(x => x.WorkGraphic)
-        //        .FirstOrDefault(x => x.Id == idDoctor);
-
-
-        //}
-
-        //public void DeleteDoctor(int doctorID)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void UpdateDoctor(Doctor doctor)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
     }
 }
