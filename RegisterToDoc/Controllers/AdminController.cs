@@ -38,13 +38,13 @@ namespace RegisterToDoc.Controllers
         /// <summary>
         /// Добавляет доктора
         /// </summary>
-        [Route("SetDoctor")]
+        [Route("InsertDoctor")]
         [HttpPost]
-        public ActionResult SetDoctor(DoctorDto doctor /*string Name, string Surname, int Age, string Specialization, string Education, int Experience*/)
+        public ActionResult SetDoctor(DoctorDto doctor /*string Name, string Surname, int Age, string GetSpecialization, string Education, int Experience*/)
         {
             try
             {
-                _adminService.SetDoctor(doctor);
+                _adminService.InsertDoctor(doctor);
 
                 return Ok("Док добавлен");
             }

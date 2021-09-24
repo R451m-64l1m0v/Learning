@@ -34,7 +34,7 @@ namespace RegisterToDoc.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Specialization")
+                    b.Property<string>("GetSpecialization")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Surname")

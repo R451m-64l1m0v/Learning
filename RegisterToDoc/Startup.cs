@@ -50,9 +50,13 @@ namespace RegisterToDoc
             });
 
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlite(Configuration.GetConnectionString("cs")));
-
+            
             services.AddScoped<ClientService>();
             services.AddScoped<AdminService>();
+            services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
+            //services.AddScoped<IDbRepository<Doctor>, DbRepository<Doctor>>();
+            //services.AddScoped<IDbRepository<WorkGraphic>, DbRepository<WorkGraphic>>();
+            //services.AddScoped<IDbRepository<Interval>, DbRepository<Interval>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

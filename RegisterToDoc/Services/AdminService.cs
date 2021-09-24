@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,56 +12,71 @@ namespace RegisterToDoc.Services
 {
     public class AdminService
     {
-        private readonly ApplicationDBContext _dbContext;
+        private readonly IDbRepository<Doctor> _doctorRepository;
+        private readonly IDbRepository<WorkGraphic> _wGrepository;
 
-        public AdminService(ApplicationDBContext dbContext)
+        public AdminService(IDbRepository<Doctor> doctorRepository, IDbRepository<WorkGraphic> wGrepository)
         {
-            _dbContext = dbContext;
+            _doctorRepository = doctorRepository;
+            _wGrepository = wGrepository;
         }
+        
 
         /// <summary>
         /// Создание рабочего дня с часами работы
         /// </summary>
         public void InsertWorkDay(int idDoctor, int dayNumber, int from, int to)
         {
-            // Вызов из BD врача и его рабочие дни по id 
-            var currentDoctor = _dbContext.Doctors
-                .Include(x => x.WorkGraphic)
-                .FirstOrDefault(x => x.Id == idDoctor);
-
+            var obedCounter = 0;
             //Создает рабочие часы
             var intervals = new List<Interval>();
             for (int i = from; i < to; i++)
             {
-                if (i == 12)
+                if (obedCounter == 4)
                 {
+                    obedCounter = 0;
                     continue;
                 }
-                intervals.Add(new Interval() { StartHour = i, EndHour = i + 1});
+                intervals.Add(new Interval() { StartHour = i, EndHour = i + 1 });
+                obedCounter++;
             }
 
-            //Добавляет рабочие часы в базу
-            currentDoctor.WorkGraphic.Add(new WorkGraphic() { StartHour = from, EndHour = to, DayNumber = dayNumber, Intervals = intervals});
-            _dbContext.SaveChanges();
-        }
+            //Вызов из BD врача и его рабочие дни по id  //todo:
+            var currentDoctor = _doctorRepository.GetById(idDoctor);
 
+            var workGraphics= _wGrepository.GetAll().Where(x => x.Doctor.Id == idDoctor);
+
+            if (workGraphics.All(x => x.DayNumber != dayNumber))
+            {
+                var wG = new WorkGraphic
+                {
+                    Doctor = currentDoctor,
+                    DayNumber = dayNumber,
+                    StartHour = from,
+                    EndHour = to,
+                    Intervals = intervals
+                };
+                _wGrepository.Insert(wG);
+            }
+        }
 
         /// <summary>
         /// Создает доктора
         /// </summary>
         /// <param name="doctor1"></param>
-        public void SetDoctor(DoctorDto doctor1)
+        public void InsertDoctor(DoctorDto doctor1)
         {
-            var doctor = new Doctor();
-            doctor.Name = doctor1.Name;
-            doctor.Surname = doctor1.Surname;
-            doctor.Age = doctor1.Age;
-            doctor.Specialization = doctor1.Specialization;
-            doctor.Education = doctor1.Education;
-            doctor.Experience = doctor1.Experience;
+            var doctor = new Doctor
+            {
+                Name = doctor1.Name,
+                Surname = doctor1.Surname,
+                Age = doctor1.Age,
+                Specialization = doctor1.Specialization,
+                Education = doctor1.Education,
+                Experience = doctor1.Experience
+            };
 
-            _dbContext.Doctors.Add(doctor);
-            _dbContext.SaveChanges();
+            _doctorRepository.Insert(doctor); //todo:
         }
     }
 }

@@ -11,60 +11,59 @@ namespace RegisterToDoc.Services
 {
     public class ClientService
     {
-        private readonly ApplicationDBContext _dbContext;
+        private readonly IDbRepository<Doctor> _repository;
 
-        public ClientService(ApplicationDBContext dbContext)
+        public ClientService(IDbRepository<Doctor> repository)
         {
-            _dbContext = dbContext;
+            _repository = repository;
         }
 
-        public List<Doctor> GetDoctorsByFilter(string spec, int exper = 0)
+        public List<Doctor> GetDoctorsByFilter(string specialization, int experience)
         {
-            return _dbContext.Doctors.Where(x => x.Specialization == spec)
-                .Where(x => x.Experience >= exper).ToList();
+            //return _repository.GetDoctorsByFilter(specialization, experience);
+            return null;
         }
 
-        public List<string> GetSpecs()
+        public List<string> GetSpecialization()
         {
-
-            return _dbContext.Doctors.Select(x => x.Specialization).ToList();
+            //return _repository.GetSpecialization();
+            return null;
         }
 
         public ICollection<WorkGraphic> GetReception(int id)
         {
-            var currentDoctor = _dbContext.Doctors
-                .Include(x => x.WorkGraphic)
-                .ThenInclude(x => x.Intervals)
-                .FirstOrDefault(x => x.Id == id);
+            //var d = _repository.GetDoctorById(id);
 
-            if (currentDoctor != null)
-            {
-                return currentDoctor.WorkGraphic;
-            }
-            else
-            {
-                throw new Exception($"Не найден доктор по id - {id}");
-            }
+            //if (d != null)
+            //{
+            //    return d.WorkGraphic;
+            //}
+            //else
+            //{
+            //    throw new Exception($"Не найден доктор по id - {id}");
+            //}
+            return null;
+
         }
 
         public void Appointment(int idDoctor, int dataNumber, int from, int to)
         {
             // Вызов из DB врача по id
-            var currentDoctor = _dbContext.Doctors.
-                Include(x => x.WorkGraphic).
-                ThenInclude(x => x.Intervals).
-                FirstOrDefault(x => x.Id == idDoctor);
+            //var currentDoctor = DbContext.Doctors.
+            //    Include(x => x.WorkGraphic).
+            //    ThenInclude(x => x.Intervals).
+            //    FirstOrDefault(x => x.Id == idDoctor);
 
-            var interval = currentDoctor.WorkGraphic.
-                FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.
-                FirstOrDefault(x => x.StartHour == from);
+            //var interval = currentDoctor.WorkGraphic.
+            //    FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.
+            //    FirstOrDefault(x => x.StartHour == from);
 
-            if (interval != null)
-            {
-                _dbContext.Intervals.Remove(interval);
-                _dbContext.SaveChanges();
-                //currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.interval;
-            }
+            //if (interval != null)
+            //{
+            //    DbContext.Intervals.Remove(interval);
+            //    DbContext.SaveChanges();
+            //    //currentDoctor.WorkGraphic.FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.interval;
+            //}
         }
     }
 }

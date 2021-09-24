@@ -57,13 +57,13 @@ namespace RegisterToDoc.Controllers
         /// <summary>
         /// Показыват врачей по специальности
         /// </summary>
-        [Route("GetSpecs")]
+        [Route("GetSpecialization")]
         [HttpGet]
         public List<string> GetSpecs()
         {
             try
             {
-                var doctors = _clientService.GetSpecs();
+                var doctors = _clientService.GetSpecialization();
                 return doctors;
             }
             catch (Exception e)

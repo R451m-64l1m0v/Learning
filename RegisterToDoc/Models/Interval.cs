@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace RegisterToDoc.Models
 {
-    public class Interval
+    public class Interval : BaseEntity
     {
-        public int Id { get; set; }
         public int StartHour { get; set; }
         public int EndHour { get; set; }
         

@@ -7,10 +7,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegisterToDoc.Models
 {
-    public class Doctor : DoctorDto
+    public class Doctor : BaseEntity
     {
-        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public int Age { get; set; }
+        public string Specialization { get; set; }
+        public string Education { get; set; }
+        public int Experience { get; set; }
         public ICollection<WorkGraphic> WorkGraphic { get; set; }
+        
     }
 
     public class DoctorDto
