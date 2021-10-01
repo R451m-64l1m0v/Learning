@@ -10,12 +10,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RegisterToDoc.BD;
 using RegisterToDoc.Controllers;
+using RegisterToDoc.Mapping;
 using RegisterToDoc.Models;
 using RegisterToDoc.Services;
+using RegisterToDoc.Validators;
 
 namespace RegisterToDoc
 {
@@ -36,6 +41,7 @@ namespace RegisterToDoc
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RegisterToDoc", Version = "v1" });
@@ -49,14 +55,18 @@ namespace RegisterToDoc
                         .AllowAnyHeader());
             });
 
+            services.AddFluentValidation();
+
+            services.AddTransient<IValidator<DoctorDto>, DoctorDtoValidator>();
+
+            services.AddAutoMapper(typeof(MappingProfile));
+            
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlite(Configuration.GetConnectionString("cs")));
             
             services.AddScoped<ClientService>();
             services.AddScoped<AdminService>();
             services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
-            //services.AddScoped<IDbRepository<Doctor>, DbRepository<Doctor>>();
-            //services.AddScoped<IDbRepository<WorkGraphic>, DbRepository<WorkGraphic>>();
-            //services.AddScoped<IDbRepository<Interval>, DbRepository<Interval>>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

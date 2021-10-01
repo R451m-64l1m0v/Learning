@@ -7,6 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegisterToDoc.Models
 {
+    /// <summary>
+    /// Доменная, т.е. лежит в БД
+    /// </summary>
     public class Doctor : BaseEntity
     {
         public string Name { get; set; }
@@ -19,6 +22,9 @@ namespace RegisterToDoc.Models
         
     }
 
+    /// <summary>
+    /// Приходит с фронта
+    /// </summary>
     public class DoctorDto
     {
         public string Name { get; set; }
@@ -29,9 +35,13 @@ namespace RegisterToDoc.Models
         public int Experience { get; set; }
     }
 
+    /// <summary>
+    /// Уходит на фронт
+    /// </summary>
     public class DoctorVm
     {
         public int Id { get; set; }
         public string Specialization { get; set; }
+        public int Experience { get; set; }
     }
 }

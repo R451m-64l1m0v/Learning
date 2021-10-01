@@ -79,7 +79,7 @@ namespace RegisterToDoc.Controllers
         /// <returns></returns>
         [Route("GetReception")]
         [HttpGet]
-        public IEnumerable<WorkGraphic> GetReception(int id)
+        public IEnumerable<WorkGraphicVm> GetReception(int id)
         {
             try
             {

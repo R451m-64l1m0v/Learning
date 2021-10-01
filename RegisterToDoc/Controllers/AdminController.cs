@@ -44,9 +44,17 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                _adminService.InsertDoctor(doctor);
+                if (ModelState.IsValid)
+                {
+                    _adminService.InsertDoctor(doctor);
 
-                return Ok("Док добавлен");
+                    return Ok("Док добавлен");
+                }
+                else
+                {
+                    throw new Exception();
+                }
+               
             }
             catch (Exception e)
             {

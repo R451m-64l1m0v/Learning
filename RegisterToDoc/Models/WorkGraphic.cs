@@ -11,4 +11,12 @@ namespace RegisterToDoc.Models
 
         public Doctor Doctor { get; set; }
     }
+
+    public class WorkGraphicVm
+    {
+        public int DayNumber { get; set; }
+        public int StartHour { get; set; }
+        public int EndHour { get; set; }
+        public ICollection<Interval> Intervals { get; set; }
+    }
 }
