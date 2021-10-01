@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RegisterToDoc.BD;
 using RegisterToDoc.Controllers;
+using RegisterToDoc.Extensions;
 using RegisterToDoc.Mapping;
 using RegisterToDoc.Models;
 using RegisterToDoc.Services;
@@ -55,9 +56,7 @@ namespace RegisterToDoc
                         .AllowAnyHeader());
             });
 
-            services.AddFluentValidation();
-
-            services.AddTransient<IValidator<DoctorDto>, DoctorDtoValidator>();
+            services.AddValidators();
 
             services.AddAutoMapper(typeof(MappingProfile));
             
