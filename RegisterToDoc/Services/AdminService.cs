@@ -25,12 +25,12 @@ namespace RegisterToDoc.Services
         /// <summary>
         /// Создание рабочего дня с часами работы
         /// </summary>
-        public void InsertWorkDay(int idDoctor, int dayNumber, int from, int to)
+        public void InsertWorkDay(WorkGraphicDto workGraphicDto, int idDoctor)
         {
             var obedCounter = 0;
             //Создает рабочие часы
             var intervals = new List<Interval>();
-            for (int i = from; i < to; i++)
+            for (int i = workGraphicDto.StartHour; i < workGraphicDto.EndHour; i++)
             {
                 if (obedCounter == 4)
                 {
@@ -44,16 +44,18 @@ namespace RegisterToDoc.Services
             //Вызов из BD врача и его рабочие дни по id  //todo:
             var currentDoctor = _doctorRepository.GetById(idDoctor);
 
-            var workGraphics= _wGrepository.GetAll().Where(x => x.Doctor.Id == idDoctor);
+            var workGraphics= _wGrepository.DbContext.WorkGraphics
+                .Include(x=>x.Doctor)
+                .Where(x => x.Doctor.Id == idDoctor);
 
-            if (workGraphics.All(x => x.DayNumber != dayNumber))
+            if (workGraphics.All(x => x.DayNumber != workGraphicDto.DayNumber))
             {
                 var wG = new WorkGraphic
                 {
                     Doctor = currentDoctor,
-                    DayNumber = dayNumber,
-                    StartHour = from,
-                    EndHour = to,
+                    DayNumber = workGraphicDto.DayNumber,
+                    StartHour = workGraphicDto.StartHour,
+                    EndHour = workGraphicDto.EndHour,
                     Intervals = intervals
                 };
                 _wGrepository.Insert(wG);

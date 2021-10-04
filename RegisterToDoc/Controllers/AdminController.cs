@@ -21,13 +21,17 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("SetWorkDay")]
         [HttpPost]
-        public ActionResult InsertWorkDay(int idDoctor, int dayNumber, int from, int to)
+        public ActionResult InsertWorkDay(WorkGraphicDto workGraphicDto, int idDoctor  /*int idDoctor, int dayNumber, int from, int to*/)
         {
             try
             {
-                _adminService.InsertWorkDay(idDoctor, dayNumber, from, to);
+                if (ModelState.IsValid)
+                {
+                    _adminService.InsertWorkDay(workGraphicDto, idDoctor);
 
-                return Ok("Успешно установлен рабочий день доктору");
+                    return Ok("Успешно установлен рабочий день доктору");
+                }
+                throw new Exception();
             }
             catch (Exception e)
             {
@@ -50,11 +54,7 @@ namespace RegisterToDoc.Controllers
 
                     return Ok("Док добавлен");
                 }
-                else
-                {
-                    throw new Exception();
-                }
-               
+                throw new Exception();
             }
             catch (Exception e)
             {

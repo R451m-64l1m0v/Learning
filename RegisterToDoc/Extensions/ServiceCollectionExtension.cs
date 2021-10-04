@@ -18,6 +18,8 @@ namespace RegisterToDoc.Extensions
 
             services.AddTransient<IValidator<DoctorDto>, DoctorDtoValidator>();
 
+            services.AddTransient<IValidator<WorkGraphicDto>, WorkGraphicValidator>();
+
             return services;
         }
     }

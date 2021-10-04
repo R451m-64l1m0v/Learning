@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 using RegisterToDoc.Models;
 
 namespace RegisterToDoc.Validators
@@ -11,11 +7,14 @@ namespace RegisterToDoc.Validators
     {
         public DoctorDtoValidator()
         {
-            //todo: impl
             RuleFor(x => x.Age).InclusiveBetween(25,80);
-            //RuleFor(x => x.Name).Length(0, 10);
-            //RuleFor(x => x.Email).EmailAddress();
-            //RuleFor(x => x.Age).InclusiveBetween(18, 60);
+            RuleFor(x => x.Experience).GreaterThan(0);
+            RuleFor(x => x.Name).Length(2, 30);
+            RuleFor(x => x.Surname).NotEmpty();
+            RuleFor(x => x.Education).NotEmpty();
+            RuleFor(x => x.Specialization).NotEmpty();
         }
     }
+
+
 }
