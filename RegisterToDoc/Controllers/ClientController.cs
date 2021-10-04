@@ -97,13 +97,17 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("Appointment")]
         [HttpPost]
-        public ActionResult Appointment(int idDoctor, int dataNumber, int from, int to)
+        public ActionResult Appointment(WorkGraphicDto workGraphicDto, int idDoctor)
         {
             try
             {
-                _clientService.Appointment(idDoctor, dataNumber, from, to);
+                if (ModelState.IsValid)
+                {
+                    _clientService.Appointment(workGraphicDto, idDoctor);
 
-                return Ok("Запись прошла успешно");
+                    return Ok("Запись прошла успешно");
+                }
+                throw new Exception();
             }
             catch (Exception e)
             {

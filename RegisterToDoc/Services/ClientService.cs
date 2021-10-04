@@ -78,7 +78,7 @@ namespace RegisterToDoc.Services
             return lst;
         }
 
-        public void Appointment(int idDoctor, int dataNumber, int from, int to)
+        public void Appointment(WorkGraphicDto workGraphicDto, int idDoctor)
         {
             var currentDoctor = _docRepository.DbContext.Doctors.
                 Include(x => x.WorkGraphic).
@@ -87,9 +87,10 @@ namespace RegisterToDoc.Services
 
             if (currentDoctor != null)
             {
-                var interval = currentDoctor.WorkGraphic.
-                    FirstOrDefault(x => x.DayNumber == dataNumber).Intervals.
-                    FirstOrDefault(x => x.StartHour == from);
+                var interval = currentDoctor.WorkGraphic
+                    .FirstOrDefault(x => x.DayNumber == workGraphicDto.DayNumber)
+                    .Intervals
+                    .FirstOrDefault(x => x.StartHour == workGraphicDto.StartHour);
 
                 if (interval != null)
                 {
