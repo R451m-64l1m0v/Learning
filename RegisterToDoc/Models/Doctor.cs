@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace RegisterToDoc.Models
 {
@@ -19,7 +20,8 @@ namespace RegisterToDoc.Models
         public string Education { get; set; }
         public int Experience { get; set; }
         public ICollection<WorkGraphic> WorkGraphic { get; set; }
-        
+        public byte[] Avatar { get; set; }
+
     }
 
     /// <summary>
@@ -32,7 +34,8 @@ namespace RegisterToDoc.Models
         public int Age { get; set; }
         public string Specialization { get; set; }
         public string Education { get; set; }
-        public int Experience { get; set; }
+        public int Experience { get; set; }        
+       
     }
 
     /// <summary>
@@ -43,5 +46,6 @@ namespace RegisterToDoc.Models
         public int Id { get; set; }
         public string Specialization { get; set; }
         public int Experience { get; set; }
+        public IFormFile Avatar { get; set; }
     }
 }

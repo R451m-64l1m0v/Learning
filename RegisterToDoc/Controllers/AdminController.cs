@@ -3,6 +3,9 @@ using RegisterToDoc.Models;
 using RegisterToDoc.Services;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using RegisterToDoc.BD;
 
 namespace RegisterToDoc.Controllers
 {
@@ -12,10 +15,13 @@ namespace RegisterToDoc.Controllers
     public class AdminController : ControllerBase
     {
         private readonly AdminService _adminService;
+        private readonly IDbRepository<Doctor> doctorRepository;
 
-        public AdminController(AdminService adminService)
+        public AdminController(AdminService adminService,
+            IDbRepository<Doctor> _doctorRepository)
         {
             _adminService = adminService;
+            doctorRepository = _doctorRepository;
         }
 
         /// <summary>
@@ -44,7 +50,7 @@ namespace RegisterToDoc.Controllers
         /// <summary>
         /// Добавляет доктора
         /// </summary>
-        [Route("InsertDoctor")]
+        [Route("SetDoctor")]
         [HttpPost]
         public ActionResult SetDoctor(DoctorDto doctor /*string Name, string Surname, int Age, string GetSpecialization, string Education, int Experience*/)
         {
@@ -61,6 +67,43 @@ namespace RegisterToDoc.Controllers
             catch (Exception e)
             {
                 return BadRequest($"Ошибка добавления доктора- {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Добавляет аватар док
+        /// </summary>
+        [Route("SetAvatar")]
+        [HttpPost]
+        public ActionResult SetAvatar(IFormFile avatar, int idDoctor)
+        {
+            try
+            {
+                var doctor = doctorRepository.GetById(idDoctor);
+
+                if (doctor != null)
+                {
+                    if (avatar != null)
+                    {
+                        byte[] imageData = null;
+                        // считываем переданный файл в массив байтов
+                        using (var binaryReader = new BinaryReader(avatar.OpenReadStream()))
+                        {
+                            imageData = binaryReader.ReadBytes((int)avatar.Length);
+                        }
+                        // установка массива байтов
+                        doctor.Avatar = imageData;
+
+                        doctorRepository.Update(doctor);
+                        return Ok();
+                    }
+                }
+                return BadRequest();
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
             }
         }
     }

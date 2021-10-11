@@ -15,7 +15,7 @@ namespace RegisterToDoc.BD
         public DbSet<Interval> Intervals { get; set; }
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
-        }
+        }       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,6 @@ namespace RegisterToDoc.BD
             modelBuilder.Entity<WorkGraphic>()
                 .HasOne(p => p.Doctor)
                 .WithMany(b => b.WorkGraphic);
-
         }
     }
 }

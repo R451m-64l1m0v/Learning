@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -75,10 +76,14 @@ namespace RegisterToDoc.Services
                 Age = doctor1.Age,
                 Specialization = doctor1.Specialization,
                 Education = doctor1.Education,
-                Experience = doctor1.Experience
+                Experience = doctor1.Experience        
             };
+
+            
 
             _doctorRepository.Insert(doctor); //todo:
         }
+
+        
     }
 }

@@ -28,6 +28,7 @@ using RegisterToDoc.Models;
 using RegisterToDoc.Services;
 using RegisterToDoc.Validators;
 using RegisterToDoc.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace RegisterToDoc
 {
@@ -86,6 +87,7 @@ namespace RegisterToDoc
 
             services.AddSwaggerGen(c =>
             {
+                c.MapType(typeof(IFormFile), () => new OpenApiSchema() { Type = "file", Format = "binary" });
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RegisterToDoc", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

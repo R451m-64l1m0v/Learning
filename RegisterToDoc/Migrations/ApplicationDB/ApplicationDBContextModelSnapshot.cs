@@ -25,6 +25,9 @@ namespace RegisterToDoc.Migrations.ApplicationDB
                     b.Property<int>("Age")
                         .HasColumnType("INTEGER");
 
+                    b.Property<byte[]>("Avatar")
+                        .HasColumnType("BLOB");
+
                     b.Property<string>("Education")
                         .HasColumnType("TEXT");
 
