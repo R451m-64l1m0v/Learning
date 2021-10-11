@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegisterToDoc.BD;
@@ -84,6 +85,29 @@ namespace RegisterToDoc.Services
             _doctorRepository.Insert(doctor); //todo:
         }
 
-        
+        /// <summary>
+        /// Добовляет аватат доктору
+        /// </summary>
+        public void SetAvatar(IFormFile avatar, int idDoctor)
+        {
+            var doctor = _doctorRepository.GetById(idDoctor);
+
+            if (doctor != null)
+            {
+                if (avatar != null)
+                {
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(avatar.OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)avatar.Length);
+                    }
+                    // установка массива байтов
+                    doctor.Avatar = imageData;
+
+                    _doctorRepository.Update(doctor);                    
+                }
+            }            
+        }
     }
 }

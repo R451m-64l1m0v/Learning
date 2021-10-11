@@ -15,13 +15,11 @@ namespace RegisterToDoc.Controllers
     public class AdminController : ControllerBase
     {
         private readonly AdminService _adminService;
-        private readonly IDbRepository<Doctor> doctorRepository;
+        
 
-        public AdminController(AdminService adminService,
-            IDbRepository<Doctor> _doctorRepository)
+        public AdminController(AdminService adminService)
         {
-            _adminService = adminService;
-            doctorRepository = _doctorRepository;
+            _adminService = adminService;           
         }
 
         /// <summary>
@@ -79,31 +77,17 @@ namespace RegisterToDoc.Controllers
         {
             try
             {
-                var doctor = doctorRepository.GetById(idDoctor);
-
-                if (doctor != null)
+                if (ModelState.IsValid)
                 {
-                    if (avatar != null)
-                    {
-                        byte[] imageData = null;
-                        // считываем переданный файл в массив байтов
-                        using (var binaryReader = new BinaryReader(avatar.OpenReadStream()))
-                        {
-                            imageData = binaryReader.ReadBytes((int)avatar.Length);
-                        }
-                        // установка массива байтов
-                        doctor.Avatar = imageData;
+                    _adminService.SetAvatar(avatar, idDoctor);
 
-                        doctorRepository.Update(doctor);
-                        return Ok();
-                    }
+                    return Ok("Фотография добавлена");
                 }
-                return BadRequest();
+                throw new Exception();
             }
             catch (Exception)
             {
-
-                throw new Exception();
+                throw new Exception("Ошибка добавления доктора");
             }
         }
     }
