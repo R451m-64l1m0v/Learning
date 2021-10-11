@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RegisterToDoc.BD;
 using RegisterToDoc.Models;
@@ -11,6 +12,7 @@ namespace RegisterToDoc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClientController : ControllerBase
     {
         ClientService _clientService;
@@ -29,6 +31,7 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("GetDoctorsByFilter")]
         [HttpGet]
+        [AllowAnonymous]
         public List<DoctorVm> GetDoctorsByFilter(string spec, int exper = 0)
         {
             try
@@ -59,6 +62,7 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("GetSpecialization")]
         [HttpGet]
+        [AllowAnonymous]
         public List<string> GetSpecs()
         {
             try
@@ -79,6 +83,7 @@ namespace RegisterToDoc.Controllers
         /// <returns></returns>
         [Route("GetReception")]
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<WorkGraphicVm> GetReception(int id)
         {
             try

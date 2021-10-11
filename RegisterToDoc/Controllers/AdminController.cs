@@ -2,11 +2,13 @@
 using RegisterToDoc.Models;
 using RegisterToDoc.Services;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RegisterToDoc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AdminController : ControllerBase
     {
         private readonly AdminService _adminService;
