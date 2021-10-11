@@ -15,9 +15,11 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using RegisterToDoc.Areas.Identity.Data;
 using RegisterToDoc.BD;
 using RegisterToDoc.Controllers;
 using RegisterToDoc.Extensions;
@@ -25,6 +27,7 @@ using RegisterToDoc.Mapping;
 using RegisterToDoc.Models;
 using RegisterToDoc.Services;
 using RegisterToDoc.Validators;
+using RegisterToDoc.Data;
 
 namespace RegisterToDoc
 {
@@ -54,6 +57,13 @@ namespace RegisterToDoc
                     {
                         OnTokenValidated = context =>
                         {
+                            var userMachine = context.HttpContext.RequestServices
+                                .GetRequiredService<UserManager<RegisterToDocUser>>();
+                            var user = userMachine.GetUserAsync(context.HttpContext.User);
+
+                            if (user==null)
+                                context.Fail("UnAuthorized");
+
                             return Task.CompletedTask;
                         }
                     };
@@ -100,7 +110,7 @@ namespace RegisterToDoc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDBContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDBContext dbContext, RegisterToDocContext registerToDocContext)
         {
             if (env.IsDevelopment())
             {
@@ -109,6 +119,7 @@ namespace RegisterToDoc
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RegisterToDoc v1"));
             }
             dbContext.Database.Migrate();
+            registerToDocContext.Database.Migrate();
 
             app.UseRouting();
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegisterToDoc.BD;
 
-namespace RegisterToDoc.Migrations
+namespace RegisterToDoc.Migrations.ApplicationDB
 {
     [DbContext(typeof(ApplicationDBContext))]
     partial class ApplicationDBContextModelSnapshot : ModelSnapshot
@@ -34,7 +34,7 @@ namespace RegisterToDoc.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("GetSpecialization")
+                    b.Property<string>("Specialization")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Surname")

@@ -31,6 +31,7 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("GetDoctorsByFilter")]
         [HttpGet]
+        [AllowAnonymous]
         public List<DoctorVm> GetDoctorsByFilter(string spec, int exper = 0)
         {
             try
@@ -61,6 +62,7 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("GetSpecialization")]
         [HttpGet]
+        [AllowAnonymous]
         public List<string> GetSpecs()
         {
             try
@@ -81,6 +83,7 @@ namespace RegisterToDoc.Controllers
         /// <returns></returns>
         [Route("GetReception")]
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<WorkGraphicVm> GetReception(int id)
         {
             try

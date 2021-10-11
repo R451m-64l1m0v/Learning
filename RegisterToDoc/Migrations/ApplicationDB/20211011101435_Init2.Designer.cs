@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegisterToDoc.BD;
 
-namespace RegisterToDoc.Migrations
+namespace RegisterToDoc.Migrations.ApplicationDB
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210922163012_Init")]
-    partial class Init
+    [Migration("20211011101435_Init2")]
+    partial class Init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,7 +36,7 @@ namespace RegisterToDoc.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("GetSpecialization")
+                    b.Property<string>("Specialization")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Surname")
