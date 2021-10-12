@@ -109,5 +109,24 @@ namespace RegisterToDoc.Controllers
                 throw new Exception($"Ошибка в запросе- {e.Message}");
             }
         }
+
+        [Route("GetDoctorsById")]
+        [HttpGet]
+        [AllowAnonymous]
+        public DoctorVm GetDoctorsById(int id)
+        {
+            try
+            {
+                var doctors = _adminService.GetDoctorsById(id);
+
+                return doctors;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Ошибка в запросе- {e.Message}");
+            }
+        }
+
+
     }
 }

@@ -107,5 +107,7 @@ namespace RegisterToDoc.Services
                 throw new Exception("Не удалось записаться");
             }
         }
+
+
     }
 }

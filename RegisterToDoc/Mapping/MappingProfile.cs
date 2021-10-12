@@ -14,7 +14,7 @@ namespace RegisterToDoc.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Doctor, DoctorVm>().ForMember(d => d.Avatar, f => f.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Avatar)));
+            CreateMap<Doctor, DoctorVm>().ForMember(d => d.Avatar, f => f.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Avatar))).ReverseMap();
             CreateMap<DoctorVm, Doctor>();
             CreateMap<WorkGraphic, WorkGraphicVm>();
             CreateMap<WorkGraphicVm, WorkGraphic>();

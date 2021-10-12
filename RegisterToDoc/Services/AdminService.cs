@@ -113,11 +113,20 @@ namespace RegisterToDoc.Services
             }            
         }
 
-
         public List<DoctorVm> GetDoctors()
         {
             var map = _mapper.Map<List<Doctor>,
                 List<DoctorVm>>(_docRepository.GetAll().ToList());
+
+            return map;
+        }
+
+        public DoctorVm GetDoctorsById(int id)
+        {
+            var doctor = _docRepository.GetById(id);
+
+            var map = _mapper.Map<DoctorVm>(doctor);
+                
 
             return map;
         }
