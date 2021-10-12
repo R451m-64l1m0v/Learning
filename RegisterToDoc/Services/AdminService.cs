@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +15,15 @@ namespace RegisterToDoc.Services
 {
     public class AdminService
     {
-        private readonly IDbRepository<Doctor> _doctorRepository;
+        private readonly IDbRepository<Doctor> _docRepository;
         private readonly IDbRepository<WorkGraphic> _wGrepository;
+        private readonly IMapper _mapper;
 
-        public AdminService(IDbRepository<Doctor> doctorRepository, IDbRepository<WorkGraphic> wGrepository)
+        public AdminService(IDbRepository<Doctor> docRepository, IDbRepository<WorkGraphic> wGrepository, IMapper mapper)
         {
-            _doctorRepository = doctorRepository;
+            _docRepository = docRepository;
             _wGrepository = wGrepository;
+            _mapper = mapper;
         }
         
 
@@ -44,7 +47,7 @@ namespace RegisterToDoc.Services
             }
 
             //Вызов из BD врача и его рабочие дни по id  //todo:
-            var currentDoctor = _doctorRepository.GetById(idDoctor);
+            var currentDoctor = _docRepository.GetById(idDoctor);
 
             var workGraphics= _wGrepository.DbContext.WorkGraphics
                 .Include(x=>x.Doctor)
@@ -82,7 +85,7 @@ namespace RegisterToDoc.Services
 
             
 
-            _doctorRepository.Insert(doctor); //todo:
+            _docRepository.Insert(doctor); //todo:
         }
 
         /// <summary>
@@ -90,7 +93,7 @@ namespace RegisterToDoc.Services
         /// </summary>
         public void SetAvatar(IFormFile avatar, int idDoctor)
         {
-            var doctor = _doctorRepository.GetById(idDoctor);
+            var doctor = _docRepository.GetById(idDoctor);
 
             if (doctor != null)
             {
@@ -105,9 +108,18 @@ namespace RegisterToDoc.Services
                     // установка массива байтов
                     doctor.Avatar = imageData;
 
-                    _doctorRepository.Update(doctor);                    
+                    _docRepository.Update(doctor);                    
                 }
             }            
+        }
+
+
+        public List<DoctorVm> GetDoctors()
+        {
+            var map = _mapper.Map<List<Doctor>,
+                List<DoctorVm>>(_docRepository.GetAll().ToList());
+
+            return map;
         }
     }
 }

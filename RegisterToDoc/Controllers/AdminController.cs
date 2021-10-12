@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using RegisterToDoc.BD;
+using System.Collections.Generic;
 
 namespace RegisterToDoc.Controllers
 {
@@ -88,6 +89,24 @@ namespace RegisterToDoc.Controllers
             catch (Exception)
             {
                 throw new Exception("Ошибка добавления доктора");
+            }
+        }
+
+
+        [Route("GetDoctors")]
+        [HttpGet]
+        [AllowAnonymous]
+        public List<DoctorVm> GetDoctors()
+        {
+            try
+            {
+                var doctors = _adminService.GetDoctors();                            
+
+                return doctors;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Ошибка в запросе- {e.Message}");
             }
         }
     }

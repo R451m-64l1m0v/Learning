@@ -46,6 +46,6 @@ namespace RegisterToDoc.Models
         public int Id { get; set; }
         public string Specialization { get; set; }
         public int Experience { get; set; }
-        public IFormFile Avatar { get; set; }
+        public string Avatar { get; set; }
     }
 }
