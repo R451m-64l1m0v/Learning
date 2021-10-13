@@ -7,12 +7,14 @@ namespace RegisterToDoc.BD
 {
     public class DbRepository<T> : IDbRepository<T> where T : BaseEntity
     {
-        public ApplicationDBContext DbContext { get; }
+        private readonly ApplicationDBContext DbContext;
+
+        public IQueryable<T> Entity => DbContext.Set<T>();
 
         public DbRepository(ApplicationDBContext dbContext)
         {
             DbContext = dbContext;
-        }
+        }        
 
         public void Delete(T t)
         {

@@ -113,11 +113,11 @@ namespace RegisterToDoc.Controllers
         [Route("GetDoctorsById")]
         [HttpGet]
         [AllowAnonymous]
-        public DoctorVm GetDoctorsById(int id)
+        public DoctorVm GetDoctorsById(int id, AdminService adminService)
         {
             try
             {
-                var doctors = _adminService.GetDoctorsById(id);
+                var doctors = adminService.GetDoctorsById(id);
 
                 return doctors;
             }

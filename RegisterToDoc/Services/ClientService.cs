@@ -15,12 +15,14 @@ namespace RegisterToDoc.Services
     {
         private readonly IDbRepository<Doctor> _docRepository;
         private readonly IDbRepository<WorkGraphic> _wgRepository;
+        private readonly IDbRepository<Interval> intervalRepository;
         private readonly IMapper _mapper;
 
-        public ClientService(IDbRepository<Doctor> docRepository, IDbRepository<WorkGraphic> wgRepository, IMapper mapper)
+        public ClientService(IUnitOfWork uow, IMapper mapper)
         {
-            _docRepository = docRepository;
-            _wgRepository = wgRepository;
+            _docRepository = uow.DbRepository<Doctor>();
+            _wgRepository = uow.DbRepository<WorkGraphic>();
+            intervalRepository = uow.DbRepository<Interval>();
             _mapper = mapper;
         }
 
@@ -43,7 +45,7 @@ namespace RegisterToDoc.Services
 
         public IEnumerable<WorkGraphicVm> GetReception(int id)
         {
-            var workGraphicsDoc = _wgRepository.DbContext.WorkGraphics.
+            var workGraphicsDoc = _wgRepository.Entity.
                 Include(x => x.Doctor).
                 Include(x => x.Intervals).
                 Where(x => x.Doctor.Id == id).ToList();
@@ -80,7 +82,7 @@ namespace RegisterToDoc.Services
 
         public void Appointment(WorkGraphicDto workGraphicDto, int idDoctor)
         {
-            var currentDoctor = _docRepository.DbContext.Doctors.
+            var currentDoctor = _docRepository.Entity.
                 Include(x => x.WorkGraphic).
                 ThenInclude(x => x.Intervals).
                 FirstOrDefault(x => x.Id == idDoctor);
@@ -94,8 +96,7 @@ namespace RegisterToDoc.Services
 
                 if (interval != null)
                 {
-                    _docRepository.DbContext.Intervals.Remove(interval);
-                    _docRepository.DbContext.SaveChanges();
+                    intervalRepository.Delete(interval);                    
                 }
                 else
                 {

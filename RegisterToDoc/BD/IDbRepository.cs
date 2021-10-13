@@ -8,7 +8,9 @@ namespace RegisterToDoc.BD
 {
     public interface IDbRepository<T> where T : BaseEntity
     {
-        ApplicationDBContext DbContext { get; }
+        //ApplicationDBContext DbContext { get; }
+
+        IQueryable<T> Entity { get; }
 
         IEnumerable<T> GetAll();
         T GetById(int id);

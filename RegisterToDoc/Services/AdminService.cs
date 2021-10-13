@@ -49,7 +49,7 @@ namespace RegisterToDoc.Services
             //Вызов из BD врача и его рабочие дни по id  //todo:
             var currentDoctor = _docRepository.GetById(idDoctor);
 
-            var workGraphics= _wGrepository.DbContext.WorkGraphics
+            var workGraphics= _wGrepository.Entity
                 .Include(x=>x.Doctor)
                 .Where(x => x.Doctor.Id == idDoctor);
 

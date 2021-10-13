@@ -137,6 +137,8 @@ namespace RegisterToDoc
             services.AddScoped<CatalogsService>();
             services.AddScoped<ClientService>();
             services.AddScoped<AdminService>();
+            services.AddScoped<UnitOfWork>();
+            services.AddScoped<IUnitOfWork>(p => p.GetRequiredService<UnitOfWork>());
             services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
 
         }
