@@ -134,6 +134,7 @@ namespace RegisterToDoc
 
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlite(Configuration.GetConnectionString("cs")));
 
+            services.AddScoped<CatalogsService>();
             services.AddScoped<ClientService>();
             services.AddScoped<AdminService>();
             services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));

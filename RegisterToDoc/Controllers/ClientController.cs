@@ -93,7 +93,7 @@ namespace RegisterToDoc.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception($"Не найден доктор по id - {id}");
+                throw new Exception($"Не найден доктор по id - {id}. Ошибка: {e.Message}");
             }
         }
 

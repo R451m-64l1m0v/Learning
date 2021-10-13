@@ -42,7 +42,7 @@ namespace RegisterToDoc.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("Не удалось установить рабочий день и сгенерировать график");
+                throw new Exception($"Не удалось установить рабочий день и сгенерировать график. Ошибка: {e.Message}");
             }
         }
 

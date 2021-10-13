@@ -13,6 +13,9 @@ namespace RegisterToDoc.BD
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<WorkGraphic> WorkGraphics { get; set; }
         public DbSet<Interval> Intervals { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<Specialization> Specialization { get; set; }
+
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
         }       
