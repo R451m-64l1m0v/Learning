@@ -12,7 +12,7 @@ namespace RegisterToDoc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class AdminController : ControllerBase
     {
         private readonly AdminService _adminService;
@@ -126,6 +126,23 @@ namespace RegisterToDoc.Controllers
                 throw new Exception($"Ошибка в запросе- {e.Message}");
             }
         }
+
+
+        //[Route("DeleteDoctor")]
+        //[HttpDelete]        
+        //public ActionResult DeleteDoctor(int id)
+        //{
+        //    try
+        //    {
+        //         _adminService.DeleteDoctor(id);
+
+        //        return Ok("Док удален");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception($"Ошибка в запросе- {e.Message}");
+        //    }
+        //}
 
 
     }

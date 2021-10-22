@@ -35,7 +35,7 @@ namespace RegisterToDoc.Models
         public int Age { get; set; }
         public string Specialization { get; set; }
         public string Education { get; set; }
-        public int Department { get; set; }
+        public string Department { get; set; }
         public int Experience { get; set; }        
        
     }

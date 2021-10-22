@@ -29,6 +29,8 @@ using RegisterToDoc.Services;
 using RegisterToDoc.Validators;
 using RegisterToDoc.Data;
 using Microsoft.AspNetCore.Http;
+using System.Reflection;
+using RegisterToDoc.Attributes;
 
 namespace RegisterToDoc
 {
@@ -134,9 +136,19 @@ namespace RegisterToDoc
 
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlite(Configuration.GetConnectionString("cs")));
 
-            services.AddScoped<CatalogsService>();
-            services.AddScoped<ClientService>();
-            services.AddScoped<AdminService>();
+            var asmbly = Assembly.GetExecutingAssembly();
+            var typeList = asmbly.GetTypes().Where(
+                    t => t.GetCustomAttributes(typeof(RegisrationMarkerAttribute), true).Length > 0
+            ).ToList();
+
+            foreach (var item in typeList)
+            {
+                services.AddScoped(item);
+            }
+
+            //services.AddScoped<CatalogsService>();
+            //services.AddScoped<ClientService>();
+            //services.AddScoped<AdminService>();
             services.AddScoped<UnitOfWork>();
             services.AddScoped<IUnitOfWork>(p => p.GetRequiredService<UnitOfWork>());
             services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));

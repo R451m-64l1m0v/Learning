@@ -8,21 +8,23 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RegisterToDoc.Attributes;
 using RegisterToDoc.BD;
 using RegisterToDoc.Models;
 
 namespace RegisterToDoc.Services
 {
+    [RegisrationMarker]
     public class AdminService
     {
         private readonly IDbRepository<Doctor> _docRepository;
         private readonly IDbRepository<WorkGraphic> _wGrepository;
         private readonly IMapper _mapper;
 
-        public AdminService(IDbRepository<Doctor> docRepository, IDbRepository<WorkGraphic> wGrepository, IMapper mapper)
+        public AdminService(IUnitOfWork uow, IMapper mapper)
         {
-            _docRepository = docRepository;
-            _wGrepository = wGrepository;
+            _docRepository = uow.DbRepository<Doctor>();
+            _wGrepository = uow.DbRepository<WorkGraphic>();
             _mapper = mapper;
         }
         
@@ -130,5 +132,18 @@ namespace RegisterToDoc.Services
 
             return map;
         }
+
+        //public void DeleteDoctor(int idDoctor)
+        //{           
+        //    var currentDoctor = _docRepository.Entity.
+        //        Include(x => x.WorkGraphic).
+        //        ThenInclude(x => x.Intervals).
+        //        FirstOrDefault(x => x.Id == idDoctor);              
+
+        //    if (currentDoctor != null)
+        //    {
+        //        _docRepository.Delete(currentDoctor);
+        //    }
+        //}
     }
 }

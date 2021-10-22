@@ -1,4 +1,5 @@
-﻿using RegisterToDoc.BD;
+﻿using RegisterToDoc.Attributes;
+using RegisterToDoc.BD;
 using RegisterToDoc.Models;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace RegisterToDoc.Services
 {
+    [RegisrationMarker]
     public class CatalogsService
     {
         private readonly IDbRepository<Specialization> specRepository;

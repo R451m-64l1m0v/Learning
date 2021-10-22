@@ -11,8 +11,8 @@ using RegisterToDoc.Services;
 namespace RegisterToDoc.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
+    [ApiController] 
+    
     public class ClientController : ControllerBase
     {
         ClientService _clientService;
@@ -111,6 +111,29 @@ namespace RegisterToDoc.Controllers
                     _clientService.Appointment(workGraphicDto, idDoctor);
 
                     return Ok("Запись прошла успешно");
+                }
+                throw new Exception();
+            }
+            catch (Exception e)
+            {
+                return BadRequest($"Ошибка записи на прием - {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Отмена записи к врачу
+        /// </summary>
+        [Route("CancelRecording")]
+        [HttpPut]
+        public ActionResult CancelRecording(WorkGraphicDto workGraphicDto, int idDoctor)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _clientService.CancelRecording(workGraphicDto, idDoctor);
+
+                    return Ok("Запись отменена");
                 }
                 throw new Exception();
             }
