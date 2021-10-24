@@ -134,7 +134,7 @@ namespace RegisterToDoc
 
             services.AddAutoMapper(typeof(MappingProfile));
 
-            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlite(Configuration.GetConnectionString("cs")));
+            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("cs")));
 
             var asmbly = Assembly.GetExecutingAssembly();
             var typeList = asmbly.GetTypes().Where(
