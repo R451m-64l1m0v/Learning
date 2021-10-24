@@ -102,13 +102,13 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("Appointment")]
         [HttpPost]
-        public ActionResult Appointment(WorkGraphicDto workGraphicDto, int idDoctor)
+        public ActionResult Appointment(WorkGraphicDto workGraphicDto, int idDoctor, string userId)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _clientService.Appointment(workGraphicDto, idDoctor);
+                    _clientService.Appointment(workGraphicDto, idDoctor, userId);
 
                     return Ok("Запись прошла успешно");
                 }
@@ -125,13 +125,13 @@ namespace RegisterToDoc.Controllers
         /// </summary>
         [Route("CancelRecording")]
         [HttpPut]
-        public ActionResult CancelRecording(WorkGraphicDto workGraphicDto, int idDoctor)
+        public ActionResult CancelRecording(WorkGraphicDto workGraphicDto, int idDoctor, string userId)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _clientService.CancelRecording(workGraphicDto, idDoctor);
+                    _clientService.CancelRecording(workGraphicDto, idDoctor, userId);
 
                     return Ok("Запись отменена");
                 }
