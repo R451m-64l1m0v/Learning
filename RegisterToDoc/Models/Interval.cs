@@ -10,6 +10,7 @@ namespace RegisterToDoc.Models
         public int StartHour { get; set; }
         public int EndHour { get; set; }
         public bool Busy { get; set; }
+        public string userId { get; set; }
 
 
         public WorkGraphic WorkGraphic { get; set; }

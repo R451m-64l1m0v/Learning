@@ -87,7 +87,7 @@ namespace RegisterToDoc.Services
         /// </summary>
         /// <param name="workGraphicDto"></param>
         /// <param name="idDoctor"></param>
-        public void Appointment(WorkGraphicDto workGraphicDto, int idDoctor)
+        public void Appointment(WorkGraphicDto workGraphicDto, int idDoctor, string userId) 
         {
             var currentDoctor = _docRepository.Entity.
                 Include(x => x.WorkGraphic).
@@ -104,7 +104,8 @@ namespace RegisterToDoc.Services
                 if (interval.Busy != true)
                 {
                     interval.Busy = true;
-                    intervalRepository.Update(interval);
+                    interval.userId = userId;
+                    intervalRepository.Update(interval);                    
                 }
                 else
                 {
@@ -122,7 +123,7 @@ namespace RegisterToDoc.Services
         /// </summary>
         /// <param name="workGraphicDto"></param>
         /// <param name="idDoctor"></param>
-        public void CancelRecording(WorkGraphicDto workGraphicDto, int idDoctor)
+        public void CancelRecording(WorkGraphicDto workGraphicDto, int idDoctor, string userId)
         {
             var currentDoctor = _docRepository.Entity.
                Include(x => x.WorkGraphic).
@@ -134,23 +135,29 @@ namespace RegisterToDoc.Services
                    .Intervals
                    .FirstOrDefault(x => x.StartHour == workGraphicDto.StartHour);
 
-
-            if (currentDoctor != null)
+            if (interval.userId == userId)
             {
-
-                if (interval.Busy != false)
+                if (currentDoctor != null)
                 {
-                    interval.Busy = false;
-                    intervalRepository.Update(interval);
+
+                    if (interval.Busy != false)
+                    {
+                        interval.Busy = false;
+                        intervalRepository.Update(interval);
+                    }
+                    else
+                    {
+                        throw new Exception("Не удалось отменить запись");
+                    }
                 }
                 else
                 {
-                    throw new Exception("Не удалось отменить запись");
+                    throw new Exception("Не удалось отменить запись, не найден доктор");
                 }
             }
             else
             {
-                throw new Exception("Не удалось отменить запись, не найден доктор");
+                throw new Exception("Не удалось отменить запись, не соответствует пользователь");
             }
         }
     }
