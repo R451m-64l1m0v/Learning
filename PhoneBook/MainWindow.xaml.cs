@@ -3,6 +3,7 @@ using PhoneBook.DataBase;
 using PhoneBook.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -37,8 +38,8 @@ namespace PhoneBook
             _applicationDbContext.Database.EnsureCreated();
 
             InitializeComponent();
-            userViewSource = (CollectionViewSource)FindResource(nameof(userViewSource));           
-            
+            userViewSource = (CollectionViewSource)FindResource(nameof(userViewSource));
+
 
         }
 
@@ -46,7 +47,6 @@ namespace PhoneBook
         {
 
             _applicationDbContext.Users.Load();
-            var a = _applicationDbContext.Users.ToList();
 
             userViewSource.Source =
                 _applicationDbContext.Users.Local.ToObservableCollection();
@@ -54,12 +54,10 @@ namespace PhoneBook
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // all changes are automatically tracked, including
-            // deletes!
+            
             _applicationDbContext.SaveChanges();
-
-            // this forces the grid to refresh to latest values
             userDataGrid.Items.Refresh();
+            userDataGrid.IsReadOnly = !userDataGrid.IsReadOnly;     
             
         }
 
@@ -70,5 +68,47 @@ namespace PhoneBook
             base.OnClosing(e);
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Search_Click(object sender, RoutedEventArgs e)
+        {
+            IQueryable<User> filtered = null;
+
+            if (nameFilter.Text != "")
+            {
+                filtered = _applicationDbContext.Users.Where(x => x.Name == nameFilter.Text);
+            }
+
+            if (surNameFilter.Text != "")
+            {
+                filtered = filtered == null
+                    ? _applicationDbContext.Users.Where(x => x.Surname == surNameFilter.Text)
+                    : filtered.Where(y => y.Surname == surNameFilter.Text);
+            }
+
+            if (phoneNumberFilter.Text != "")
+            {
+                if (Int32.TryParse(phoneNumberFilter.Text, out var number))
+                {
+                    filtered = filtered == null
+                        ? _applicationDbContext.Users.Where(x => x.PhoneNumber == number)
+                        : filtered.Where(y => y.PhoneNumber == number);
+                }
+            }
+
+            //userDataGrid.Items.Refresh();
+            if (filtered == null)
+            {
+                userViewSource.Source = _applicationDbContext.Users.Local.ToObservableCollection();
+            }
+            else
+            {
+                userViewSource.Source = new ObservableCollection<User>(filtered.ToList());
+            }
+            
+        }
     }
 }
