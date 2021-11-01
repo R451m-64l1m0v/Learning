@@ -25,27 +25,23 @@ namespace PhoneBook
     /// </summary>
     public partial class MainWindow : Window
     {
-
         private readonly ApplicationDBContext _applicationDbContext;
 
         private CollectionViewSource userViewSource;
-
 
         public MainWindow()
         {
             _applicationDbContext = new ApplicationDBContext();
 
-            _applicationDbContext.Database.EnsureCreated();
+            _applicationDbContext.Database.EnsureCreated();            
 
             InitializeComponent();
             userViewSource = (CollectionViewSource)FindResource(nameof(userViewSource));
-
 
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
             _applicationDbContext.Users.Load();
 
             userViewSource.Source =
@@ -53,12 +49,14 @@ namespace PhoneBook
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            
+        {            
             _applicationDbContext.SaveChanges();
             userDataGrid.Items.Refresh();
-            userDataGrid.IsReadOnly = !userDataGrid.IsReadOnly;     
-            
+            userDataGrid.IsReadOnly = !userDataGrid.IsReadOnly;
+            Start.Content = Start.Content == "Сохранить"
+                ? Start.Content = "Редaктировать"
+                : Start.Content = "Сохранить";
+            Delete.Visibility = Start.Content == "Редaктировать" ? Delete.Visibility = Visibility.Hidden : Delete.Visibility = Visibility.Visible;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -68,10 +66,7 @@ namespace PhoneBook
             base.OnClosing(e);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
@@ -85,13 +80,13 @@ namespace PhoneBook
             if (surNameFilter.Text != "")
             {
                 filtered = filtered == null
-                    ? _applicationDbContext.Users.Where(x => x.Surname == surNameFilter.Text)
-                    : filtered.Where(y => y.Surname == surNameFilter.Text);
+                    ? _applicationDbContext.Users.Where(x => x.SurName == surNameFilter.Text)
+                    : filtered.Where(y => y.SurName == surNameFilter.Text);
             }
 
             if (phoneNumberFilter.Text != "")
             {
-                if (Int32.TryParse(phoneNumberFilter.Text, out var number))
+                if (Int64.TryParse(phoneNumberFilter.Text, out var number))
                 {
                     filtered = filtered == null
                         ? _applicationDbContext.Users.Where(x => x.PhoneNumber == number)
@@ -99,7 +94,7 @@ namespace PhoneBook
                 }
             }
 
-            //userDataGrid.Items.Refresh();
+           
             if (filtered == null)
             {
                 userViewSource.Source = _applicationDbContext.Users.Local.ToObservableCollection();
@@ -107,8 +102,15 @@ namespace PhoneBook
             else
             {
                 userViewSource.Source = new ObservableCollection<User>(filtered.ToList());
-            }
-            
+            }            
+        }
+
+        private void Button1_Click(object sender, RoutedEventArgs e)
+        {
+            var currentUser = userDataGrid.SelectedItem as User;
+            var currentUserDel = _applicationDbContext.Users.FirstOrDefault(x => x.Id == currentUser.Id);
+            _applicationDbContext.Users.Remove(currentUserDel);
+            userDataGrid.Items.Refresh();
         }
     }
 }

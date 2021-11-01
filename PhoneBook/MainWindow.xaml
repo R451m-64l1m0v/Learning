@@ -101,9 +101,6 @@
         </Grid>
 
         <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
             <DataGrid
                 x:Name="userDataGrid"
                 AutoGenerateColumns="False"
@@ -111,14 +108,14 @@
                 IsReadOnly="True"
                 ItemsSource="{Binding Source={StaticResource userViewSource}}"
                 RowDetailsVisibilityMode="VisibleWhenSelected">
-                <DataGrid.Columns>                    
+                <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
                         Binding="{Binding Name}"
                         Header="Имя" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Surname}"
+                        Binding="{Binding SurName}"
                         Header="Фамилия" />
                     <DataGridTextColumn
                         Width="*"
@@ -128,17 +125,41 @@
                         Width="*"
                         Binding="{Binding PhoneNumber}"
                         Header="Номер телефона" />
+
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
 
         <Grid Grid.Row="4">
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
                 <Button
                     x:Name="Start"
                     Margin="10"
                     Click="Button_Click"
-                    Content="Сохранить" />
+                    Content="Редaктировать" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="2"
+                HorizontalAlignment="Left"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="Delete"
+                    Margin="10"
+                    Click="Button1_Click"
+                    Content="Удалить"
+                    ToolTip="Кликните на строку и нажмите удалить"
+                    Visibility="Hidden" />
             </StackPanel>
         </Grid>
 

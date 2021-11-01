@@ -8,10 +8,10 @@ namespace PhoneBook.Models
 {
     public class User
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string Surname { get; set; }
+        public string SurName { get; set; }
         public int Age { get; set; }
-        public int PhoneNumber { get; set; }      
+        public long PhoneNumber { get; set; }      
     }
 }
