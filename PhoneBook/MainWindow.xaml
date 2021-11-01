@@ -15,7 +15,7 @@
         <CollectionViewSource x:Key="userViewSource" />
     </Window.Resources>
 
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" />
             <RowDefinition Height="0.05*" />
